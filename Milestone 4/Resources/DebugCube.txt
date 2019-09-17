@@ -1,0 +1,5 @@
+DEBUGCUBE
+Transform
+0.0 0.0 0.0 0.05 0.05 0.05
+Sprite
+debugcube.png

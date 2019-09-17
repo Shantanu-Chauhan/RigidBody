@@ -1,0 +1,119 @@
+﻿  Body.cpp
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\Components\Body.cpp(45,17): warning C4477:  'fscanf_s' : format string '%255s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\Components\Body.cpp(45,17): message :  this argument is used as a buffer size
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\Components\Body.cpp(88,17): warning C4477:  'fscanf_s' : format string '%255s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+  Component.cpp
+  Controller.cpp
+  Sprite.cpp
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\Components\Body.cpp(88,17): message :  this argument is used as a buffer size
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\Components\Sprite.cpp(23,17): warning C4477:  'fscanf_s' : format string '%255s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+  Transform.cpp
+  Main.cpp
+  Camera.cpp
+  Frame Rate Controller.cpp
+  Game Object.cpp
+  CollisionManager.cpp
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\Components\Sprite.cpp(23,17): message :  this argument is used as a buffer size
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\src\Manager\CollisionManager.cpp(270,27): warning C4267:  '=': conversion from 'size_t' to 'int', possible loss of data
+  DynamicAABBTree.cpp
+  Event Manager.cpp
+  Game Object Manager.cpp
+  Input Manager.cpp
+  NSq.cpp
+  PhysicsManager.cpp
+  Resource Manager.cpp
+  SAT.cpp
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\src\Manager\CollisionManager.cpp(272,29): warning C4267:  '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\src\Manager\SAT.cpp(77,25): warning C4305:  'initializing': truncation from 'double' to 'float'
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\src\Manager\SAT.cpp(264,20): warning C4101:  'distance2': unreferenced local variable
+  Math2D.cpp
+  Vector2D.cpp
+  Compiling...
+  ObjectFactory.cpp
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\src\Manager\SAT.cpp(264,9): warning C4101:  'distance1': unreferenced local variable
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\src\ObjectFactory.cpp(45,18): warning C4477:  'fscanf_s' : format string '%255s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\src\ObjectFactory.cpp(45,18): message :  this argument is used as a buffer size
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\src\ObjectFactory.cpp(116,16): warning C4477:  'fscanf_s' : format string '%255s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\src\ObjectFactory.cpp(116,16): message :  this argument is used as a buffer size
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\src\ObjectFactory.cpp(134,17): warning C4477:  'fscanf_s' : format string '%255s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+  IndexBuffer.cpp
+  Renderer.cpp
+  Shader.cpp
+  Texture.cpp
+  glm.cpp
+  imgui.cpp
+  imgui_draw.cpp
+  imgui_impl_opengl3.cpp
+  imgui_impl_sdl.cpp
+  imgui_widgets.cpp
+  stb_image.cpp
+  VertexArray.cpp
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\src\ObjectFactory.cpp(134,17): message :  this argument is used as a buffer size
+  VertexBuffer.cpp
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\Milestone 4\src\OpenGL\VertexArray.cpp(25,3): warning C4312:  'type cast': conversion from 'unsigned int' to 'const void *' of greater size
+Main.obj : error LNK2001: unresolved external symbol SDL_GetWindowSurface
+Main.obj : error LNK2001: unresolved external symbol SDL_GL_SwapWindow
+Main.obj : error LNK2001: unresolved external symbol SDL_Init
+Main.obj : error LNK2001: unresolved external symbol SDL_DestroyWindow
+Main.obj : error LNK2001: unresolved external symbol SDL_GetError
+Main.obj : error LNK2001: unresolved external symbol SDL_Quit
+Main.obj : error LNK2001: unresolved external symbol SDL_GL_CreateContext
+Main.obj : error LNK2001: unresolved external symbol SDL_CreateWindow
+Main.obj : error LNK2001: unresolved external symbol glewInit
+Frame Rate Controller.obj : error LNK2001: unresolved external symbol SDL_GetTicks
+Input Manager.obj : error LNK2001: unresolved external symbol SDL_GetKeyboardState
+Input Manager.obj : error LNK2001: unresolved external symbol SDL_memset
+Input Manager.obj : error LNK2001: unresolved external symbol SDL_GetMouseState
+Input Manager.obj : error LNK2001: unresolved external symbol SDL_PollEvent
+Input Manager.obj : error LNK2001: unresolved external symbol SDL_memcpy
+IndexBuffer.obj : error LNK2001: unresolved external symbol __glewBindBuffer
+IndexBuffer.obj : error LNK2001: unresolved external symbol __glewBufferData
+IndexBuffer.obj : error LNK2001: unresolved external symbol __glewGenBuffers
+IndexBuffer.obj : error LNK2001: unresolved external symbol __glewDeleteBuffers
+Shader.obj : error LNK2001: unresolved external symbol __glewUseProgram
+Shader.obj : error LNK2001: unresolved external symbol __glewGetShaderiv
+Shader.obj : error LNK2001: unresolved external symbol __glewCompileShader
+Shader.obj : error LNK2001: unresolved external symbol __glewCreateShader
+Shader.obj : error LNK2001: unresolved external symbol __glewCreateProgram
+Shader.obj : error LNK2001: unresolved external symbol __glewUniform1i
+Shader.obj : error LNK2001: unresolved external symbol __glewGetShaderInfoLog
+Shader.obj : error LNK2001: unresolved external symbol __glewValidateProgram
+Shader.obj : error LNK2001: unresolved external symbol __glewGetUniformLocation
+Shader.obj : error LNK2001: unresolved external symbol __glewAttachShader
+Shader.obj : error LNK2001: unresolved external symbol __glewDeleteProgram
+Shader.obj : error LNK2001: unresolved external symbol __glewShaderSource
+Shader.obj : error LNK2001: unresolved external symbol __glewUniformMatrix4fv
+Shader.obj : error LNK2001: unresolved external symbol __glewDeleteShader
+Shader.obj : error LNK2001: unresolved external symbol __glewLinkProgram
+Shader.obj : error LNK2001: unresolved external symbol __glewUniform4f
+Texture.obj : error LNK2001: unresolved external symbol __glewActiveTexture
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewEnableVertexAttribArray
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewBindVertexArray
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewBindSampler
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewVertexAttribPointer
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewGetAttribLocation
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewGetProgramiv
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewDeleteVertexArrays
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewBlendFuncSeparate
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewBlendEquation
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewGenVertexArrays
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewBlendEquationSeparate
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewDetachShader
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewGetProgramInfoLog
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_GetPerformanceCounter
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_free
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_GL_GetDrawableSize
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_GetWindowWMInfo
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_ShowCursor
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_SetClipboardText
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_GetClipboardText
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_WarpMouseInWindow
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_GetModState
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_GetWindowFlags
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_SetCursor
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_FreeCursor
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_CreateSystemCursor
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_GetPerformanceFrequency
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_GetWindowSize
+MSVCRT.lib(exe_winmain.obj) : error LNK2001: unresolved external symbol WinMain
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\x64\Release\Milestone 4.exe : fatal error LNK1120: 65 unresolved externals

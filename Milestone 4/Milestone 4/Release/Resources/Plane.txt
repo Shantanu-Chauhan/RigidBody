@@ -1,0 +1,11 @@
+PLANE
+Transform
+0.0 0.0 0.0 1.0 1.0 1.0
+Sprite
+happy.png
+Controller
+Body
+2.0
+AABB
+quaternion
+0.0 0.0 0.0 1.0

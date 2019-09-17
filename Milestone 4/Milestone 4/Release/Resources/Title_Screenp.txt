@@ -1,0 +1,25 @@
+Cube.txt
+0.0 1.0 -10.0
+Cube.txt
+0.0 3.0 -10.0
+Cube.txt
+0.0 6.0 -10.0
+Cube.txt
+0.0 5.0 -10.0
+Cube.txt
+0.0 7.0 -10.0
+Plane.txt
+0.0 -1.0 -10.0
+DebugCube.txt
+DebugCube.txt
+DebugCube.txt
+DebugCube.txt
+DebugCube.txt
+DebugCube.txt
+DebugCube.txt
+DebugCube.txt
+DebugCube.txt
+DebugCube.txt
+DebugCube.txt
+DebugCube.txt
+DebugCube.txt

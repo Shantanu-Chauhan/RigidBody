@@ -1,0 +1,154 @@
+﻿  Body.cpp
+c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\components\body.cpp(45): warning C4477: 'fscanf_s' : format string '%255s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+  c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\components\body.cpp(45): note: this argument is used as a buffer size
+c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\components\body.cpp(88): warning C4477: 'fscanf_s' : format string '%255s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+  c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\components\body.cpp(88): note: this argument is used as a buffer size
+  Component.cpp
+  Controller.cpp
+  Sprite.cpp
+c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\components\sprite.cpp(23): warning C4477: 'fscanf_s' : format string '%255s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+  c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\components\sprite.cpp(23): note: this argument is used as a buffer size
+  Transform.cpp
+  Main.cpp
+  Camera.cpp
+  Frame Rate Controller.cpp
+  Game Object.cpp
+  CollisionManager.cpp
+c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\src\manager\collisionmanager.cpp(261): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\src\manager\collisionmanager.cpp(263): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  DynamicAABBTree.cpp
+  Event Manager.cpp
+  Game Object Manager.cpp
+  Input Manager.cpp
+  NSq.cpp
+  PhysicsManager.cpp
+  Resource Manager.cpp
+  SAT.cpp
+c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(77): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(263): warning C4101: 'distance2': unreferenced local variable
+c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(263): warning C4101: 'distance1': unreferenced local variable
+  Math2D.cpp
+  Vector2D.cpp
+  Generating Code...
+  Compiling...
+  ObjectFactory.cpp
+c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\src\objectfactory.cpp(45): warning C4477: 'fscanf_s' : format string '%255s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+  c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\src\objectfactory.cpp(45): note: this argument is used as a buffer size
+c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\src\objectfactory.cpp(116): warning C4477: 'fscanf_s' : format string '%255s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+  c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\src\objectfactory.cpp(116): note: this argument is used as a buffer size
+c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\src\objectfactory.cpp(134): warning C4477: 'fscanf_s' : format string '%255s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+  c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\src\objectfactory.cpp(134): note: this argument is used as a buffer size
+  IndexBuffer.cpp
+  Renderer.cpp
+  Shader.cpp
+  Texture.cpp
+  glm.cpp
+  imgui.cpp
+  imgui_draw.cpp
+  imgui_impl_opengl3.cpp
+  imgui_impl_sdl.cpp
+  imgui_widgets.cpp
+  stb_image.cpp
+  VertexArray.cpp
+c:\users\pikachu\desktop\fix and upload\cs550 make\milestone 4\milestone 4\milestone 4\src\opengl\vertexarray.cpp(25): warning C4312: 'type cast': conversion from 'unsigned int' to 'const void *' of greater size
+  VertexBuffer.cpp
+  Generating Code...
+Main.obj : error LNK2019: unresolved external symbol glewInit referenced in function SDL_main
+Main.obj : error LNK2019: unresolved external symbol SDL_GetError referenced in function SDL_main
+Main.obj : error LNK2019: unresolved external symbol SDL_CreateWindow referenced in function SDL_main
+Main.obj : error LNK2019: unresolved external symbol SDL_GetWindowSurface referenced in function SDL_main
+Main.obj : error LNK2019: unresolved external symbol SDL_DestroyWindow referenced in function SDL_main
+Main.obj : error LNK2019: unresolved external symbol SDL_GL_CreateContext referenced in function SDL_main
+Main.obj : error LNK2019: unresolved external symbol SDL_GL_SwapWindow referenced in function SDL_main
+Main.obj : error LNK2019: unresolved external symbol SDL_Init referenced in function SDL_main
+Main.obj : error LNK2019: unresolved external symbol SDL_Quit referenced in function SDL_main
+Frame Rate Controller.obj : error LNK2019: unresolved external symbol SDL_GetTicks referenced in function "public: void __cdecl FrameRateController::FrameEnd(void)" (?FrameEnd@FrameRateController@@QEAAXXZ)
+Input Manager.obj : error LNK2019: unresolved external symbol SDL_memset referenced in function "public: __cdecl Input_Manager::Input_Manager(void)" (??0Input_Manager@@QEAA@XZ)
+Input Manager.obj : error LNK2019: unresolved external symbol SDL_memcpy referenced in function "public: void __cdecl Input_Manager::Update(void)" (?Update@Input_Manager@@QEAAXXZ)
+Input Manager.obj : error LNK2019: unresolved external symbol SDL_GetKeyboardState referenced in function "public: void __cdecl Input_Manager::Update(void)" (?Update@Input_Manager@@QEAAXXZ)
+Input Manager.obj : error LNK2019: unresolved external symbol SDL_GetMouseState referenced in function "public: void __cdecl Input_Manager::Update(void)" (?Update@Input_Manager@@QEAAXXZ)
+imgui_impl_sdl.obj : error LNK2001: unresolved external symbol SDL_GetMouseState
+Input Manager.obj : error LNK2019: unresolved external symbol SDL_PollEvent referenced in function "public: void __cdecl Input_Manager::Update(void)" (?Update@Input_Manager@@QEAAXXZ)
+IndexBuffer.obj : error LNK2001: unresolved external symbol __glewBindBuffer
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewBindBuffer
+VertexBuffer.obj : error LNK2001: unresolved external symbol __glewBindBuffer
+IndexBuffer.obj : error LNK2001: unresolved external symbol __glewBufferData
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewBufferData
+VertexBuffer.obj : error LNK2001: unresolved external symbol __glewBufferData
+IndexBuffer.obj : error LNK2001: unresolved external symbol __glewDeleteBuffers
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewDeleteBuffers
+VertexBuffer.obj : error LNK2001: unresolved external symbol __glewDeleteBuffers
+IndexBuffer.obj : error LNK2001: unresolved external symbol __glewGenBuffers
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewGenBuffers
+VertexBuffer.obj : error LNK2001: unresolved external symbol __glewGenBuffers
+Shader.obj : error LNK2001: unresolved external symbol __glewAttachShader
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewAttachShader
+Shader.obj : error LNK2001: unresolved external symbol __glewCompileShader
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewCompileShader
+Shader.obj : error LNK2001: unresolved external symbol __glewCreateProgram
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewCreateProgram
+Shader.obj : error LNK2001: unresolved external symbol __glewCreateShader
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewCreateShader
+Shader.obj : error LNK2001: unresolved external symbol __glewDeleteProgram
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewDeleteProgram
+Shader.obj : error LNK2001: unresolved external symbol __glewDeleteShader
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewDeleteShader
+Shader.obj : error LNK2001: unresolved external symbol __glewGetShaderInfoLog
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewGetShaderInfoLog
+Shader.obj : error LNK2001: unresolved external symbol __glewGetShaderiv
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewGetShaderiv
+Shader.obj : error LNK2001: unresolved external symbol __glewGetUniformLocation
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewGetUniformLocation
+Shader.obj : error LNK2001: unresolved external symbol __glewLinkProgram
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewLinkProgram
+Shader.obj : error LNK2001: unresolved external symbol __glewShaderSource
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewShaderSource
+Shader.obj : error LNK2001: unresolved external symbol __glewUniform1i
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewUniform1i
+Shader.obj : error LNK2001: unresolved external symbol __glewUniform4f
+Shader.obj : error LNK2001: unresolved external symbol __glewUniformMatrix4fv
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewUniformMatrix4fv
+Shader.obj : error LNK2001: unresolved external symbol __glewUseProgram
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewUseProgram
+Shader.obj : error LNK2001: unresolved external symbol __glewValidateProgram
+Texture.obj : error LNK2001: unresolved external symbol __glewActiveTexture
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewActiveTexture
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewBlendEquation
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewBlendFuncSeparate
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewBlendEquationSeparate
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewDetachShader
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewEnableVertexAttribArray
+VertexArray.obj : error LNK2001: unresolved external symbol __glewEnableVertexAttribArray
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewGetAttribLocation
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewGetProgramInfoLog
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewGetProgramiv
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewVertexAttribPointer
+VertexArray.obj : error LNK2001: unresolved external symbol __glewVertexAttribPointer
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewBindSampler
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewBindVertexArray
+VertexArray.obj : error LNK2001: unresolved external symbol __glewBindVertexArray
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewDeleteVertexArrays
+VertexArray.obj : error LNK2001: unresolved external symbol __glewDeleteVertexArrays
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __glewGenVertexArrays
+VertexArray.obj : error LNK2001: unresolved external symbol __glewGenVertexArrays
+imgui_impl_sdl.obj : error LNK2019: unresolved external symbol SDL_free referenced in function "char const * __cdecl ImGui_ImplSDL2_GetClipboardText(void *)" (?ImGui_ImplSDL2_GetClipboardText@@YAPEBDPEAX@Z)
+imgui_impl_sdl.obj : error LNK2019: unresolved external symbol SDL_SetClipboardText referenced in function "void __cdecl ImGui_ImplSDL2_SetClipboardText(void *,char const *)" (?ImGui_ImplSDL2_SetClipboardText@@YAXPEAXPEBD@Z)
+imgui_impl_sdl.obj : error LNK2019: unresolved external symbol SDL_GetClipboardText referenced in function "char const * __cdecl ImGui_ImplSDL2_GetClipboardText(void *)" (?ImGui_ImplSDL2_GetClipboardText@@YAPEBDPEAX@Z)
+imgui_impl_sdl.obj : error LNK2019: unresolved external symbol SDL_GetWindowFlags referenced in function "void __cdecl ImGui_ImplSDL2_UpdateMousePosAndButtons(void)" (?ImGui_ImplSDL2_UpdateMousePosAndButtons@@YAXXZ)
+imgui_impl_sdl.obj : error LNK2019: unresolved external symbol SDL_GetWindowSize referenced in function "void __cdecl ImGui_ImplSDL2_NewFrame(struct SDL_Window *)" (?ImGui_ImplSDL2_NewFrame@@YAXPEAUSDL_Window@@@Z)
+imgui_impl_sdl.obj : error LNK2019: unresolved external symbol SDL_GL_GetDrawableSize referenced in function "void __cdecl ImGui_ImplSDL2_NewFrame(struct SDL_Window *)" (?ImGui_ImplSDL2_NewFrame@@YAXPEAUSDL_Window@@@Z)
+imgui_impl_sdl.obj : error LNK2019: unresolved external symbol SDL_GetModState referenced in function "bool __cdecl ImGui_ImplSDL2_ProcessEvent(union SDL_Event const *)" (?ImGui_ImplSDL2_ProcessEvent@@YA_NPEBTSDL_Event@@@Z)
+imgui_impl_sdl.obj : error LNK2019: unresolved external symbol SDL_WarpMouseInWindow referenced in function "void __cdecl ImGui_ImplSDL2_UpdateMousePosAndButtons(void)" (?ImGui_ImplSDL2_UpdateMousePosAndButtons@@YAXXZ)
+imgui_impl_sdl.obj : error LNK2019: unresolved external symbol SDL_CreateSystemCursor referenced in function "bool __cdecl ImGui_ImplSDL2_Init(struct SDL_Window *)" (?ImGui_ImplSDL2_Init@@YA_NPEAUSDL_Window@@@Z)
+imgui_impl_sdl.obj : error LNK2019: unresolved external symbol SDL_SetCursor referenced in function "void __cdecl ImGui_ImplSDL2_UpdateMouseCursor(void)" (?ImGui_ImplSDL2_UpdateMouseCursor@@YAXXZ)
+imgui_impl_sdl.obj : error LNK2019: unresolved external symbol SDL_FreeCursor referenced in function "void __cdecl ImGui_ImplSDL2_Shutdown(void)" (?ImGui_ImplSDL2_Shutdown@@YAXXZ)
+imgui_impl_sdl.obj : error LNK2019: unresolved external symbol SDL_ShowCursor referenced in function "void __cdecl ImGui_ImplSDL2_UpdateMouseCursor(void)" (?ImGui_ImplSDL2_UpdateMouseCursor@@YAXXZ)
+imgui_impl_sdl.obj : error LNK2019: unresolved external symbol SDL_GetPerformanceCounter referenced in function "void __cdecl ImGui_ImplSDL2_NewFrame(struct SDL_Window *)" (?ImGui_ImplSDL2_NewFrame@@YAXPEAUSDL_Window@@@Z)
+imgui_impl_sdl.obj : error LNK2019: unresolved external symbol SDL_GetPerformanceFrequency referenced in function "void __cdecl ImGui_ImplSDL2_NewFrame(struct SDL_Window *)" (?ImGui_ImplSDL2_NewFrame@@YAXPEAUSDL_Window@@@Z)
+imgui_impl_sdl.obj : error LNK2019: unresolved external symbol SDL_GetWindowWMInfo referenced in function "bool __cdecl ImGui_ImplSDL2_Init(struct SDL_Window *)" (?ImGui_ImplSDL2_Init@@YA_NPEAUSDL_Window@@@Z)
+MSVCRTD.lib(exe_winmain.obj) : error LNK2019: unresolved external symbol WinMain referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\..\Dependencies\GLEW\lib\Release\Win32\glew32s.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\..\SDL2.0 Lib\lib\x86\SDL2.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\..\SDL2.0 Lib\lib\x86\SDL2main.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\..\SDL2.0 Lib\lib\x86\SDL2test.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Milestone 4\x64\Debug\Milestone 4.exe : fatal error LNK1120: 65 unresolved externals
