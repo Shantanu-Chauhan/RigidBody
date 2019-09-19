@@ -58,12 +58,16 @@ void PhysicsManager::Update(float frameTime)
 	//BELOW IS THE CODE FOR SEQUENTIAL IMPULSE
 	//Everything is laid out below step by step so that anyone can read what to do with sequential impulses
 	//(will change it during the summer for applying friction as well!)
-	for(int z=0;z<10;z++)//10 iterations of sequential impulses
+	Eigen::Matrix<float, 1, 12> Jacobian;
+	Eigen::Matrix<float, 12, 1> Velocity;
+	glm::vec3 RaxN, RbxN;
+	Eigen::Matrix<float, 12, 1> MaxxInvXJacobianT;
+	Eigen::Matrix<float, 12, 1> DeltaV;
+	glm::vec3 LinearA, LinearB, AngularA, AngularB;
+	for(int z=0;z<1000;z++)//10 iterations of sequential impulses
 	{
 		for (auto c : gpCollisionManager->mContacts)
 		{
-			Eigen::Matrix<float, 1, 12> Jacobian;
-			Eigen::Matrix<float, 12, 1> Velocity;
 			//Creating the Mass Matrix
 			if (z == 0)
 			{
@@ -104,7 +108,6 @@ void PhysicsManager::Update(float frameTime)
 			//the contactPoints below are the actual contact points I get after clipping on which the impulses are to be applied
 			for (int i = 0; i < c->ContactPoints.size(); i++)
 			{
-				glm::vec3 RaxN, RbxN;
 				RaxN = glm::cross(c->Ra[i] ,c->ContactNormal);
 				RbxN = glm::cross( c->Rb[i] , c->ContactNormal);
 				
@@ -126,7 +129,7 @@ void PhysicsManager::Update(float frameTime)
 				Jacobian(0,10) = RbxN.y;
 				Jacobian(0,11) = RbxN.z;
 
-				Eigen::Matrix<float, 12, 1> MaxxInvXJacobianT;
+				
 				MaxxInvXJacobianT = c->MassInv * Jacobian.transpose();
 				
 				float EffectiveMass=Jacobian * MaxxInvXJacobianT;//Effective mass
@@ -164,8 +167,8 @@ void PhysicsManager::Update(float frameTime)
 				Lambda = c->lambdaSum[i] - c->oldlambdaSum[i];
 
 				//Calculating the delta V
-				Eigen::Matrix<float, 12, 1> DeltaV = MaxxInvXJacobianT*Lambda;
-				glm::vec3 LinearA, LinearB, AngularA, AngularB;
+				DeltaV = MaxxInvXJacobianT*Lambda;
+				
 				LinearA = glm::vec3(DeltaV(0, 0), DeltaV(1, 0), DeltaV(2, 0));
 				AngularA= glm::vec3(DeltaV(3, 0), DeltaV(4, 0), DeltaV(5, 0));
 
