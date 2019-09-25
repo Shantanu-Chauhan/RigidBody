@@ -217,6 +217,26 @@ class Contact
 public:
 	Contact();
 	~Contact(){}
+	Contact(Contact &other) 
+	{
+		mBodies[0] = other.mBodies[0];
+		mBodies[1] = other.mBodies[1];
+		ContactNormal = other.ContactNormal;
+		PenetrationDepth = other.PenetrationDepth;
+		Ra = other.Ra;
+		Rb = other.Rb;
+		lambdaSum = other.lambdaSum;
+		tangentImpulseSum1 = other.tangentImpulseSum1;
+		tangentImpulseSum2 = other.tangentImpulseSum2;
+		ReferenceIndex = other.ReferenceIndex;
+		ReferenceFace = other.ReferenceFace;
+		 MassInv = other.MassInv;
+		penetration = other.penetration;
+		differenceVector = other.differenceVector;
+		colSide = other.colSide;
+		ContactPoints = other.ContactPoints;//These are on incident face
+		PointsOnRerenceFace = other.PointsOnRerenceFace;//These are on reference face
+	}
 public:
 	Body *mBodies[2];
 	glm::vec3 ContactNormal;
@@ -224,6 +244,8 @@ public:
 	std::vector<glm::vec3>Ra;//Vector btw Body A center to collision point(On A)
 	std::vector<glm::vec3>Rb;//Vector btw Body B center to collision point(On B)
 	std::vector<float>lambdaSum;
+	std::vector<float> tangentImpulseSum1;
+	std::vector<float> tangentImpulseSum2;
 	HalfEdge::Face* ReferenceFace;
 	HalfEdge::Face* IncidentFace;
 	
@@ -260,6 +282,7 @@ public:
 
 public:
 	std::list<Contact *>mContacts;
+	std::list<Contact *>mOldContacts;
 	// 2d array of function pointers, used to store the collision functions addresses
 
 	/*bool(*CollisionFunctions[Shape::NUM][Shape::NUM])(Shape *pShape1, float Pos1X, float Pos1Y, 

@@ -293,6 +293,10 @@ int main(int argc, char* args[])
 			{
 				gpGameObjectFactory->LoadLevel("Title_Screenp.txt",true);
 			}
+			if (gpInputManager->isTriggered(SDL_SCANCODE_2))//Load the big level
+			{
+				gpGameObjectFactory->LoadLevel("Title_Screenp.txt", false);
+			}
 
 			gpEventManager->Update(frameTime);
 

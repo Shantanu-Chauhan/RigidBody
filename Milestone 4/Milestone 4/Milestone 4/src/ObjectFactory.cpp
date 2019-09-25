@@ -64,7 +64,16 @@ void ObjectFactory::LoadLevel(const char *pFilename,bool objects)
 	{
 		if (gpInputManager->isTriggered(SDL_SCANCODE_1))
 		{
-			int dim = 10;
+			gpGameObjectManager->mGameobjects.erase(gpGameObjectManager->mGameobjects.begin(), gpGameObjectManager->mGameobjects.end());
+			if (gpPhysicsManager != nullptr)
+			{
+
+				delete gpPhysicsManager->die.m_root;
+				gpPhysicsManager->die.m_root = nullptr;
+
+				gpPhysicsManager->die.m_pairs.clear();
+			}
+			int dim = 8;
 			{
 			for (int j = 0; j < dim; ++j) {
 				for (int k = 0; k < dim; ++k) {
@@ -82,14 +91,14 @@ void ObjectFactory::LoadLevel(const char *pFilename,bool objects)
 				}
 			}
 			{
-				int dim = 4;
+				int dim = 3;
 				for (int i = 0; i < dim; ++i) {
 					for (int j = 0; j < dim; ++j) {
 						for (int k = 0; k < dim; ++k) {
 							GameObject* go = LoadObject("Cube.txt");
 							Body* pB = static_cast<Body*>(go->GetComponent(BODY));
 							Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
-							pTr->mPos = glm::vec3(1.0f * i*-1.0f, 1.0f*j*1.5f, 1.0f * k*1.5f-22.0f);
+							pTr->mPos = glm::vec3(1.0f * i*-1.5f, 1.0f*j*1.5f, 1.0f * k*1.5f-22.0f);
 							pB->Initialize();
 							if (gpPhysicsManager != nullptr && pB)
 								gpPhysicsManager->die.Add(pB);

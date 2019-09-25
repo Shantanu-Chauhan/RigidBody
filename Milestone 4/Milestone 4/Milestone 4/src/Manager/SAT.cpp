@@ -303,7 +303,10 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 
 		Manifold->Ra.push_back(ShortestPointA - A->mPos);//vector from the respective bodies center to the penetrating point which will be resolved
 		Manifold->Rb.push_back(ShortestPointB - B->mPos);//vector from the respective bodies center to the penetrating point which will be resolved
-
+		Manifold->lambdaSum.push_back(0.0f);
+		Manifold->tangentImpulseSum1.push_back(0.0f);
+		Manifold->tangentImpulseSum2.push_back(0.0f);
+		Manifold->oldlambdaSum.push_back(0.0f);
 
 
 		gpCollisionManager->mContacts.push_back(Manifold);//finally the manifold is pushed 
@@ -389,7 +392,10 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 		{
 			Manifold->Ra.push_back(Manifold->PointsOnRerenceFace[i] - Manifold->mBodies[0]->mPos);//Vectors btw the center and the penetration points
 			Manifold->Rb.push_back(Manifold->ContactPoints[i] - Manifold->mBodies[1]->mPos);	  //Vectors btw the center and the penetration points
-			//these will be resolved in the solver
+			Manifold->lambdaSum.push_back(0.0f);
+			Manifold->tangentImpulseSum1.push_back(0.0f);
+			Manifold->tangentImpulseSum2.push_back(0.0f);
+			Manifold->oldlambdaSum.push_back(0.0f);																					  //these will be resolved in the solver
 		}
 		//finallly pushing the manifold
 		gpCollisionManager->mContacts.push_back(Manifold);
