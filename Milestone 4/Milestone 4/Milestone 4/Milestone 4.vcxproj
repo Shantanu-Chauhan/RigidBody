@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Dependencies\Eigen;%(AdditionalIncludeDirectories);$(SolutionDir)..\SDL2.0 Lib\include;$(SolutionDir)..\Dependencies\GLEW\include;$(SolutionDir)\Milestone 4\src\OpenGL\vendor</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Dependencies\Eigen;%(AdditionalIncludeDirectories);$(SolutionDir)..\SDL2.0 Lib\include;$(SolutionDir)..\Dependencies\GLEW\include;$(SolutionDir)\Milestone 4\src\OpenGL\vendor</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);GLEW_STATIC;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -108,7 +108,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Pikachu\Desktop\FIX AND UPLOAD\CS550 MAKE\Milestone 4\Dependencies\Eigen;%(AdditionalIncludeDirectories);$(SolutionDir)..\SDL2.0 Lib\include;$(SolutionDir)..\Dependencies\GLEW\include;$(SolutionDir)\Milestone 4\src\OpenGL\vendor</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Dependencies\Eigen;%(AdditionalIncludeDirectories);$(SolutionDir)..\SDL2.0 Lib\include;$(SolutionDir)..\Dependencies\GLEW\include;$(SolutionDir)\Milestone 4\src\OpenGL\vendor</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);GLEW_STATIC;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
