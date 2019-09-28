@@ -1,63 +1,13 @@
-﻿  Body.cpp
-  Component.cpp
-  Controller.cpp
-  Sprite.cpp
-  Transform.cpp
-  Main.cpp
-  Camera.cpp
-  Frame Rate Controller.cpp
-  Game Object.cpp
-  CollisionManager.cpp
-  DynamicAABBTree.cpp
-  Event Manager.cpp
-  Game Object Manager.cpp
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\game object manager.cpp(29): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\game object manager.cpp(67): warning C4018: '<': signed/unsigned mismatch
-  Input Manager.cpp
-  NSq.cpp
-  PhysicsManager.cpp
+﻿  PhysicsManager.cpp
 c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\physicsmanager.cpp(74): warning C4018: '<': signed/unsigned mismatch
 c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\physicsmanager.cpp(76): warning C4018: '<': signed/unsigned mismatch
 c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\physicsmanager.cpp(167): warning C4018: '<': signed/unsigned mismatch
 c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\physicsmanager.cpp(330): warning C4018: '<': signed/unsigned mismatch
-  Resource Manager.cpp
-  SAT.cpp
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(26): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(77): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(83): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(102): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(129): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(144): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(221): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(239): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(315): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(369): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(391): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(404): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(264): warning C4101: 'distance2': unreferenced local variable
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(264): warning C4101: 'distance1': unreferenced local variable
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(434): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\sat.cpp(518): warning C4018: '<': signed/unsigned mismatch
-  Math2D.cpp
-  Vector2D.cpp
-  Compiling...
-  ObjectFactory.cpp
-  IndexBuffer.cpp
-  Renderer.cpp
-  Shader.cpp
-  Texture.cpp
-  glm.cpp
-  imgui.cpp
-  imgui_draw.cpp
-  imgui_impl_opengl3.cpp
-  imgui_impl_sdl.cpp
-  imgui_widgets.cpp
-  stb_image.cpp
-  VertexArray.cpp
-  VertexBuffer.cpp
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  All 4244 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  0 of 4244 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
 SDL2main.lib(SDL_windows_main.obj) : warning LNK4049: locally defined symbol ___iob_func imported
 glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Users\Pikachu\Desktop\RigidBody\Milestone 4\Milestone 4\Release\vc120.pdb'; linking object as if no debug info

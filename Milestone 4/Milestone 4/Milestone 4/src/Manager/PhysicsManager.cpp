@@ -77,7 +77,7 @@ void PhysicsManager::Update(float frameTime)
 						{
 							float dist = glm::distance(oldContactManifold->ContactPoints[i] , newContactManifold->ContactPoints[j]);
 							//if (difference.x < 0.005f || difference.y < 0.005f || difference.z < 0.005f)
-							if (dist < 0.01f)
+							if (dist < 0.001f)
 							{
 								newContactManifold->lambdaSum[j] = oldContactManifold->lambdaSum[i] ;
 								newContactManifold->tangentImpulseSum1[j] = oldContactManifold->tangentImpulseSum1[i];
@@ -125,7 +125,7 @@ void ApplyFrictionToContacts(CollisionManager* gpCollisionManager, float frameTi
 	Eigen::Matrix<float, 1, 12> Jacobian;
 	//Eigen::Matrix<float, 12, 1> Velocity;
 	glm::vec3 RaxN, RbxN;
-	for (int z = 0; z < 10; z++)//10 iterations of sequential impulses
+	for (int z = 0; z < 5; z++)//10 iterations of sequential impulses
 	{
 		for (auto c : gpCollisionManager->mContacts)
 		{
@@ -285,7 +285,7 @@ void ApplyImpulseToContacts(CollisionManager* gpCollisionManager, float frameTim
 	Eigen::Matrix<float, 12, 1> MaxxInvXJacobianT;
 	Eigen::Matrix<float, 12, 1> DeltaV;
 	glm::vec3 LinearA, LinearB, AngularA, AngularB;
-	for (int z = 0; z < 10; z++)//10 iterations of sequential impulses
+	for (int z = 0; z < 5; z++)//10 iterations of sequential impulses
 	{
 		for (auto c : gpCollisionManager->mContacts)
 		{
