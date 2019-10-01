@@ -108,9 +108,11 @@ void Body::Initialize()
 	InertiaTensor = glm::mat3(1.0f);
 	float MOver12 = mMass / 12.0f;
 	if (mMass < 2.0f)
+	{
 		InertiaTensor[0][0] = MOver12 * (pow(Extent.y, 2) + pow(Extent.z, 2));
-	InertiaTensor[1][1] = MOver12 * (pow(Extent.z, 2) + pow(Extent.x, 2));
-	InertiaTensor[2][2] = MOver12 * (pow(Extent.x, 2) + pow(Extent.y, 2));
+		InertiaTensor[1][1] = MOver12 * (pow(Extent.z, 2) + pow(Extent.x, 2));
+		InertiaTensor[2][2] = MOver12 * (pow(Extent.x, 2) + pow(Extent.y, 2));
+	}
 	if (mMass < 2.0f)
 		InertiaInverse = glm::inverse(InertiaTensor);
 	else
@@ -126,7 +128,7 @@ void Body::Initialize()
 void Body::Integrate(float DeltaTime)//Semi Impicit Euler
 {
 	//Save current position
-	glm::vec3 G = glm::vec3(0.0f, -10.0f, 0.0f);
+	glm::vec3 G = glm::vec3(0.0f, -9.8f, 0.0f);
 
 	if (mMass != 2.0f)//Only integrating the movable objects not the static platform
 	{
