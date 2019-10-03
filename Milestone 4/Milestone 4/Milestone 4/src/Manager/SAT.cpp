@@ -9,14 +9,15 @@
 
 std::vector<glm::vec3> Project(HalfEdge::Face* ProjectionPlane, std::vector<glm::vec3> Points, glm::vec3 PointOnPlane);
 
+void ContactReduction(std::vector<glm::vec3>& Polygon, std::vector<float>& depths, glm::vec3 refFaceNormal);
 
-extern CollisionManager *gpCollisionManager;
+extern CollisionManager* gpCollisionManager;
 std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, HalfEdge::Edge* ReferenceFace);
 float distance(glm::vec3 Normal, glm::vec3 PointonPlane, glm::vec3 Point);//Everything global
 
 int LineLineIntersect(
-	glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 p4, glm::vec3 *pa, glm::vec3 *pb,
-	float *mua, float *mub);
+	glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 p4, glm::vec3* pa, glm::vec3* pb,
+	float* mua, float* mub);
 
 //The function to the the support point the along the given direction
 glm::vec3 SupportPoint(HalfEdge A, glm::vec3 Direction)
@@ -42,7 +43,7 @@ float Project(glm::vec3 P1, glm::vec3 E1, glm::vec3 P2, glm::vec3 E2, glm::vec3 
 	float epsilon = 0.005f;
 	float L = glm::length(E1xE2);
 	//Skip Parallel
-	if (L < epsilon*sqrtf(glm::length2(E1)*glm::length2(E2)))
+	if (L < epsilon * sqrtf(glm::length2(E1) * glm::length2(E2)))
 	{
 		return -std::numeric_limits<float>::infinity();
 	}
@@ -82,12 +83,12 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 	//trying to find a separation axis using faces of A
 	for (int i = 0; i < ShapeA->structure.m_faces.size(); i++)
 	{
-		glm::mat3 Trans = glm::transpose(B->rotationmatrix)*A->rotationmatrix;//Taking to the B's local space
+		glm::mat3 Trans = glm::transpose(B->rotationmatrix) * A->rotationmatrix;//Taking to the B's local space
 		glm::vec3 normal = Trans * ShapeA->structure.m_faces[i]->Normal;
 		glm::vec3 point = SupportPoint(ShapeB->structure, -normal);
 		glm::vec3 Apos;
-		Apos = Trans * (ShapeA->structure.m_faces[i]->edge->vert->position) 
-			+ glm::transpose(B->rotationmatrix)*(ShapeA->Position - ShapeB->Position);
+		Apos = Trans * (ShapeA->structure.m_faces[i]->edge->vert->position)
+			+ glm::transpose(B->rotationmatrix) * (ShapeA->Position - ShapeB->Position);
 		float distance = glm::dot(normal, point - Apos);
 		if (distance > aMax)
 		{
@@ -101,11 +102,11 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 	//trying to find a separation axis using faces of B
 	for (int i = 0; i < ShapeB->structure.m_faces.size(); i++)
 	{
-		glm::mat3 Trans = glm::transpose(A->rotationmatrix)*B->rotationmatrix;//Taking to the A's local space
+		glm::mat3 Trans = glm::transpose(A->rotationmatrix) * B->rotationmatrix;//Taking to the A's local space
 		glm::vec3 normal = Trans * ShapeB->structure.m_faces[i]->Normal;
 		glm::vec3 point = SupportPoint(ShapeA->structure, -normal);
-		glm::vec3 Bpos = (Trans*ShapeB->structure.m_faces[i]->edge->vert->position);
-		Bpos = Trans * (ShapeB->structure.m_faces[i]->edge->vert->position) + glm::transpose(A->rotationmatrix)*(ShapeB->Position - ShapeA->Position);
+		glm::vec3 Bpos = (Trans * ShapeB->structure.m_faces[i]->edge->vert->position);
+		Bpos = Trans * (ShapeB->structure.m_faces[i]->edge->vert->position) + glm::transpose(A->rotationmatrix) * (ShapeB->Position - ShapeA->Position);
 		float distance = glm::dot(normal, point - Bpos);
 		if (distance > bMax)
 		{
@@ -118,7 +119,7 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 
 
 	//EDGE TEST
-	glm::mat3 transform = glm::transpose(B->rotationmatrix)*(A->rotationmatrix);//To take the normal from global to B's local space
+	glm::mat3 transform = glm::transpose(B->rotationmatrix) * (A->rotationmatrix);//To take the normal from global to B's local space
 	//taking the global point of A's center to B's local space
 	glm::vec3 C1 = glm::transpose(B->rotationmatrix) * (ShapeA->Position - ShapeB->Position);
 
@@ -134,8 +135,8 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 		glm::vec3 P1 = transform * (Edge1->prev->vert->position + ShapeA->Position - ShapeB->Position);
 		glm::vec3 Q1 = transform * (Edge1->vert->position + ShapeA->Position - ShapeB->Position);
 		glm::vec3 E1 = Q1 - P1;
-		P1 = transform * (Edge1->prev->vert->position) + glm::transpose(B->rotationmatrix)*(ShapeA->Position - ShapeB->Position);
-		Q1 = transform * (Edge1->vert->position) + glm::transpose(B->rotationmatrix)*(ShapeA->Position - ShapeB->Position);
+		P1 = transform * (Edge1->prev->vert->position) + glm::transpose(B->rotationmatrix) * (ShapeA->Position - ShapeB->Position);
+		Q1 = transform * (Edge1->vert->position) + glm::transpose(B->rotationmatrix) * (ShapeA->Position - ShapeB->Position);
 		E1 = Q1 - P1;
 
 		glm::vec3 U1 = transform * (Edge1->face->Normal);
@@ -178,7 +179,7 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 	HalfEdge::Face* ReferenceFace = nullptr;
 	HalfEdge::Face* IncidentFace = nullptr;
 	int incidentIndex = -1;
-	HalfEdge::Edge* Edge1 = nullptr, *Edge2 = nullptr;
+	HalfEdge::Edge* Edge1 = nullptr, * Edge2 = nullptr;
 	float sMax = 0.0f;
 
 	const float kRelTol = 0.95f;
@@ -216,12 +217,12 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 		if (axis == aAxis)//A is reference
 		{
 			glm::vec3 FaceNormal = ShapeA->structure.m_faces[axis]->Normal;
-			FaceNormal = A->rotationmatrix*FaceNormal;
+			FaceNormal = A->rotationmatrix * FaceNormal;
 			float mindist = std::numeric_limits<float>::infinity();
 			for (int i = 0; i < ShapeB->structure.m_faces.size(); i++)
 			{
 				glm::vec3 BNormal = ShapeB->structure.m_faces[i]->Normal;
-				float distance = glm::dot(FaceNormal, B->rotationmatrix*BNormal);
+				float distance = glm::dot(FaceNormal, B->rotationmatrix * BNormal);
 				if (distance < mindist)
 				{
 					IncidentFace = ShapeB->structure.m_faces[i];
@@ -234,12 +235,12 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 			if (axis == bAxis)//B is reference
 			{
 				glm::vec3 FaceNormal = ShapeB->structure.m_faces[axis]->Normal;
-				FaceNormal = B->rotationmatrix*FaceNormal;
+				FaceNormal = B->rotationmatrix * FaceNormal;
 				float mindist = std::numeric_limits<float>::infinity();
 				for (int i = 0; i < ShapeA->structure.m_faces.size(); i++)
 				{
 					glm::vec3 ANormal = ShapeA->structure.m_faces[i]->Normal;
-					float distance = glm::dot(FaceNormal, A->rotationmatrix*ANormal);
+					float distance = glm::dot(FaceNormal, A->rotationmatrix * ANormal);
 					if (distance < mindist)
 					{
 						IncidentFace = ShapeA->structure.m_faces[i];
@@ -260,25 +261,25 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 		Manifold->ReferenceFace = Edge1->face;
 		Manifold->IncidentIndex = E2;
 		Manifold->IncidentFace = Edge2->face;
-		
+
 		float distance1, distance2;
 
 		glm::vec3 FaceNormal = Edge1->face->Normal;
-		FaceNormal = A->rotationmatrix*FaceNormal;
+		FaceNormal = A->rotationmatrix * FaceNormal;
 		glm::vec3 PointOnPlane = Edge1->vert->position;
-		PointOnPlane = A->rotationmatrix*PointOnPlane + A->mPos;
+		PointOnPlane = A->rotationmatrix * PointOnPlane + A->mPos;
 
 		glm::vec3 vert1, vert2;
 		vert1 = Edge1->prev->vert->position;
 		vert2 = Edge1->vert->position;
-		vert1 = A->rotationmatrix*vert1 + A->mPos;
-		vert2 = A->rotationmatrix*vert2 + A->mPos;
+		vert1 = A->rotationmatrix * vert1 + A->mPos;
+		vert2 = A->rotationmatrix * vert2 + A->mPos;
 
 		glm::vec3 vert3, vert4;
 		vert3 = Edge2->prev->vert->position;
 		vert4 = Edge2->vert->position;
-		vert3 = B->rotationmatrix*vert3 + B->mPos;
-		vert4 = B->rotationmatrix*vert4 + B->mPos;
+		vert3 = B->rotationmatrix * vert3 + B->mPos;
+		vert4 = B->rotationmatrix * vert4 + B->mPos;
 
 		glm::vec3 ShortestPointA, ShortestPointB;
 		float mua, mub;
@@ -286,7 +287,7 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 		//^^^^^^^^^^^^^^^Finding the points on the edges that are closest to each other
 		//and taking them as points of penetration that will be used to resolve the collision
 		float depth = glm::distance(ShortestPointA, ShortestPointB);
-		glm::vec3 point = ShortestPointA + 0.5f*(ShortestPointB - ShortestPointA);//This was being used earlier as the point of penetration
+		glm::vec3 point = ShortestPointA + 0.5f * (ShortestPointB - ShortestPointA);//This was being used earlier as the point of penetration
 		//this was the mid point between the interacting edges or the witness edges
 
 		glm::vec3 E1, E2;
@@ -310,10 +311,13 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 
 
 		gpCollisionManager->mContacts.push_back(Manifold);//finally the manifold is pushed 
+
 		//Debug
 		ImGui::Begin("CONTACT POINTS");
 		for (int i = 0; i < Manifold->ContactPoints.size(); i++)
+		{
 			ImGui::Text("(%f)x (%f)y (%f)z", Manifold->ContactPoints[i].x, Manifold->ContactPoints[i].y, Manifold->ContactPoints[i].z);
+		}
 		ImGui::End();
 		//Debug
 	}
@@ -342,16 +346,16 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 		std::vector<glm::vec3>Polygon;
 
 		//Pushing all the vertices of the incident face that will be clipped
-		glm::vec3 facevert = (Manifold->mBodies[1]->rotationmatrix*IncidentFace->edge->vert->position) + Manifold->mBodies[1]->mPos;
+		glm::vec3 facevert = (Manifold->mBodies[1]->rotationmatrix * IncidentFace->edge->vert->position) + Manifold->mBodies[1]->mPos;
 		Polygon.push_back(facevert);
 
-		facevert = (Manifold->mBodies[1]->rotationmatrix*IncidentFace->edge->next->vert->position) + Manifold->mBodies[1]->mPos;
+		facevert = (Manifold->mBodies[1]->rotationmatrix * IncidentFace->edge->next->vert->position) + Manifold->mBodies[1]->mPos;
 		Polygon.push_back(facevert);
 
-		facevert = (Manifold->mBodies[1]->rotationmatrix*IncidentFace->edge->next->next->vert->position) + Manifold->mBodies[1]->mPos;
+		facevert = (Manifold->mBodies[1]->rotationmatrix * IncidentFace->edge->next->next->vert->position) + Manifold->mBodies[1]->mPos;
 		Polygon.push_back(facevert);
 
-		facevert = (Manifold->mBodies[1]->rotationmatrix*IncidentFace->edge->prev->vert->position) + Manifold->mBodies[1]->mPos;
+		facevert = (Manifold->mBodies[1]->rotationmatrix * IncidentFace->edge->prev->vert->position) + Manifold->mBodies[1]->mPos;
 		Polygon.push_back(facevert);
 		//all vertices pushed now these will be clipped with the adjacent faces to the reference face
 
@@ -359,31 +363,45 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->next);
 		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->next->next);
 		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->prev);
-		
+
 		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->twin);
 		//^^^^^^^The final points are also clipped against the reference face so as to get the points on or behind the reference face
 
 		glm::vec3 ReferenceNormal = ReferenceFace->Normal;
-		ReferenceNormal = Manifold->mBodies[0]->rotationmatrix*ReferenceNormal;
+		ReferenceNormal = Manifold->mBodies[0]->rotationmatrix * ReferenceNormal;
 		//Now depth is calulated and pushed for every point
+		std::vector<float> depths;
+		std::vector<glm::vec3> points;
 		for (int i = 0; i < Polygon.size(); i++)
 		{
 			glm::vec3 PointOnPlane = ReferenceFace->edge->vert->position;
-			PointOnPlane = Manifold->mBodies[0]->rotationmatrix*PointOnPlane + Manifold->mBodies[0]->mPos;
+			PointOnPlane = Manifold->mBodies[0]->rotationmatrix * PointOnPlane + Manifold->mBodies[0]->mPos;
 			float distance1 = distance(ReferenceNormal, PointOnPlane, Polygon[i]);
 			if (distance1 <= 0.0f)
 			{
-				Manifold->ContactPoints.push_back(Polygon[i]);//this is not used but still pushed
-				Manifold->PenetrationDepth.push_back(distance1);
-				Manifold->ContactNormal = ReferenceNormal;//The contact normal is also pushed, can be done once butttt :-p
+				depths.push_back(distance1);
+				points.push_back(Polygon[i]);
 			}
 		}
+
+		ContactReduction(points, depths, ReferenceNormal);
+
+		for (int i = 0; i < points.size(); i++)
+		{
+			Manifold->ContactPoints.push_back(points[i]);//this is not used but still pushed
+			Manifold->PenetrationDepth.push_back(depths[i]);
+			Manifold->ContactNormal = ReferenceNormal;//The contact normal is also pushed, can be done once butttt :-p
+
+		}
+
+
+
 		//checking if the contact normal is outward pointing
 		if (glm::dot(Manifold->ContactNormal, Manifold->mBodies[1]->mPos - Manifold->mBodies[0]->mPos) < 0.0f)
 			Manifold->ContactNormal = -Manifold->ContactNormal;
 
 		glm::vec3 PointOnPlane = ReferenceFace->edge->vert->position;
-		PointOnPlane = Manifold->mBodies[0]->rotationmatrix*PointOnPlane + Manifold->mBodies[0]->mPos;
+		PointOnPlane = Manifold->mBodies[0]->rotationmatrix * PointOnPlane + Manifold->mBodies[0]->mPos;
 		//the contact points that we have after clipping are on the incident face
 		//projecting the onto the reference face to get the other points of penetration
 		Manifold->PointsOnRerenceFace = Project(ReferenceFace, Manifold->ContactPoints, PointOnPlane);
@@ -401,14 +419,14 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 		gpCollisionManager->mContacts.push_back(Manifold);
 		//Debug
 		ImGui::Begin("CONTACT POINTS");
-		for(int i=0;i<Manifold->ContactPoints.size();i++)
-		ImGui::Text("(%f)x (%f)y (%f)z", Manifold->ContactPoints[i].x, Manifold->ContactPoints[i].y, Manifold->ContactPoints[i].z);
+		for (int i = 0; i < Manifold->ContactPoints.size(); i++)
+			ImGui::Text("(%f)x (%f)y (%f)z", Manifold->ContactPoints[i].x, Manifold->ContactPoints[i].y, Manifold->ContactPoints[i].z);
 		ImGui::End();
 		//Debug
 	}
 	//Debug this tells you the clliding feature index and the depth of penetration
 	ImGui::Begin("PENETRATION DEPTH AND FEATURE INDEX");
-	ImGui::Text("( %f )A ( %f )B ( %f )E, %d-AI %d-BI %d-EI1 %d-EI2", aMax, bMax, MaxSeparation,aAxis,bAxis,MaxIndex1,MaxIndex2);
+	ImGui::Text("( %f )A ( %f )B ( %f )E, %d-AI %d-BI %d-EI1 %d-EI2", aMax, bMax, MaxSeparation, aAxis, bAxis, MaxIndex1, MaxIndex2);
 	ImGui::End();
 	//Debug
 	return true;
@@ -426,15 +444,15 @@ std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, H
 	if (Polygon.empty())
 		return Out;
 	glm::vec3 StartVertex = Polygon.back();
-	glm::vec3 PointOnPlane = Manifold->mBodies[0]->rotationmatrix*(ReferenceFace->vert->position) 
+	glm::vec3 PointOnPlane = Manifold->mBodies[0]->rotationmatrix * (ReferenceFace->vert->position)
 		+ Manifold->mBodies[0]->mPos;
 	//Transforming the local point to global space
-	float distance1 = distance(Manifold->mBodies[0]->rotationmatrix*ReferenceFace->twin->face->Normal, 
+	float distance1 = distance(Manifold->mBodies[0]->rotationmatrix * ReferenceFace->twin->face->Normal,
 		PointOnPlane, StartVertex);
 	for (int i = 0; i < Polygon.size(); i++)
 	{
 		glm::vec3 endVertex = Polygon[i];
-		float distance2 = distance(Manifold->mBodies[0]->rotationmatrix*ReferenceFace->twin->face->Normal,
+		float distance2 = distance(Manifold->mBodies[0]->rotationmatrix * ReferenceFace->twin->face->Normal,
 			PointOnPlane, endVertex);
 
 		if (distance1 <= 0.0f && distance2 <= 0.0f)//Both points are behind or on the reference face
@@ -466,8 +484,8 @@ std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, H
 
 //Getting the closest point btw the 2 edges that are on the edges
 int LineLineIntersect(
-	glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 p4, glm::vec3 *pa, glm::vec3 *pb,
-	float *mua, float *mub)
+	glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec3 p4, glm::vec3* pa, glm::vec3* pb,
+	float* mua, float* mub)
 {
 	glm::vec3 p13, p43, p21;
 	float d1343, d4321, d1321, d4343, d2121;
@@ -512,7 +530,7 @@ int LineLineIntersect(
 }
 
 //Projecting the given points onto the given plane
-std::vector<glm::vec3> Project(HalfEdge::Face * ProjectionPlane, std::vector<glm::vec3> Points, glm::vec3 PointOnPlane)
+std::vector<glm::vec3> Project(HalfEdge::Face* ProjectionPlane, std::vector<glm::vec3> Points, glm::vec3 PointOnPlane)
 {
 	std::vector<glm::vec3> Output;
 	for (int i = 0; i < Points.size(); i++)
@@ -522,5 +540,121 @@ std::vector<glm::vec3> Project(HalfEdge::Face * ProjectionPlane, std::vector<glm
 		Output.push_back(ans);
 	}
 	return Output;
+}
+
+void ContactReduction(std::vector<glm::vec3>& Polygon, std::vector<float>& depths, glm::vec3 refFaceNormal)
+{
+	if (Polygon.size() > 4)
+	{
+		std::vector <glm::vec3> tempPoints;
+		std::vector <float> tempDepths;
+		float depth = -std::numeric_limits<float>::infinity();
+		glm::vec3 Deepest, Line, Triangle, Final;
+		float maxDepth = 0.0f;
+		tempPoints = Polygon;
+		//Finding deepest point
+		for (int i = 0; i < tempPoints.size(); i++)
+		{
+			if (depths[i] > depth)
+			{
+				Deepest = tempPoints[i];
+				depth = maxDepth = depths[i];
+			}
+		}
+
+		tempPoints.erase(std::find(tempPoints.begin(), tempPoints.end(), Deepest));
+		tempDepths.push_back(maxDepth);
+
+		//Finding farthest from the deepest
+		float far = -std::numeric_limits<float>::max();
+		for (int i = 0; i < tempPoints.size(); i++)
+		{
+			float distSq = glm::distance2(tempPoints[i], Deepest);
+			if (distSq > far)
+			{
+				far = distSq;
+				Line = tempPoints[i];
+				maxDepth = depths[i];
+			}
+		}
+		tempDepths.push_back(maxDepth);
+		tempPoints.erase(std::find(tempPoints.begin(), tempPoints.end(), Line));
+
+		// find largest area triangle
+		float maxArea = -std::numeric_limits<float>::max();
+		int winding = 0;
+		for (int i = 0; i < tempPoints.size(); i++)
+		{
+			glm::vec3 side1 = Deepest - tempPoints[i];
+			glm::vec3 side2 = Line - tempPoints[i];
+
+			float area = 0.5f * glm::dot(glm::cross(side1, side2), refFaceNormal);
+			if (abs(area) > maxArea)
+			{
+				if (area < 0) winding = -1; else winding = 1;
+				maxArea = abs(area);
+				Triangle = tempPoints[i];
+				maxDepth = depths[i];
+			}
+		}
+		tempDepths.push_back(maxDepth);
+		tempPoints.erase(std::find(tempPoints.begin(), tempPoints.end(), Triangle));
+
+		maxArea = -std::numeric_limits<float>::max();
+		glm::vec3 side1(0);
+		glm::vec3 side2(0);
+		int A = 0, B = 1, C = 2;
+		if (winding < 0)
+		{
+			glm::vec3 tempD, tempL, tempT;
+			tempD = Deepest;
+			tempL = Line;
+			tempT = Triangle;
+			Deepest = tempT;
+			Line = tempD;
+			Triangle = tempL;
+		}
+		float totalArea = 0.0f, area;
+		for (int i = 0; i < tempPoints.size(); i++)
+		{
+			totalArea = 0.0f;
+
+			side1 = Deepest - tempPoints[i];
+			side2 = Line - tempPoints[i];
+
+			area = 0.5f * glm::dot(glm::cross(side1, side2), refFaceNormal);
+			if (area < 0)
+				totalArea += area;
+
+			side1 = Line - tempPoints[i];
+			side2 = Triangle - tempPoints[i];
+
+			area = 0.5f * glm::dot(glm::cross(side1, side2), refFaceNormal);
+			if (area < 0)
+				totalArea += area;
+
+			side1 = Triangle - tempPoints[i];
+			side2 = Deepest - tempPoints[i];
+
+			area = 0.5f * glm::dot(glm::cross(side1, side2), refFaceNormal);
+			if (area < 0)
+				totalArea += area;
+
+			if (abs(totalArea) > maxArea)
+			{
+				maxArea = abs(totalArea);
+				Final = tempPoints[i];
+				maxDepth = depths[i];
+			}
+		}
+		tempDepths.push_back(maxDepth);
+		Polygon.clear();
+		Polygon.push_back(Deepest);
+		Polygon.push_back(Line);
+		Polygon.push_back(Triangle);
+		Polygon.push_back(Final);
+		depths.clear();
+		depths = tempDepths;
+	}
 }
 

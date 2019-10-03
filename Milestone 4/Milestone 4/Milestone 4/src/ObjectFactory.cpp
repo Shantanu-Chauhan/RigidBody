@@ -73,25 +73,22 @@ void ObjectFactory::LoadLevel(const char *pFilename,bool objects)
 
 				gpPhysicsManager->die.m_pairs.clear();
 			}
-			int dim = 8;
+			int dim = 10;
 			{
 			for (int j = 0; j < dim; ++j) {
 				for (int k = 0; k < dim; ++k) {
 					GameObject* go = LoadObject("Plane.txt");
 					Body* pB = static_cast<Body*>(go->GetComponent(BODY));
 					Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
-					pTr->mPos = glm::vec3(1.0f * j-4.0f, -2.0f, 1.0f * k-25.0f);
+					pTr->mPos = glm::vec3(1.0f * j-8.0f, -2.0f, 1.0f * k-25.0f);
 					pB->Initialize();
-
-					//physics->dAABBTree.AddCollider(static_cast<Collider*>(go->GetComponent(COLLIDER)));
 						if (gpPhysicsManager != nullptr && pB)
 							gpPhysicsManager->die.Add(pB);
-						//physics->dAABBTree.AddCollider(static_cast<Collider*>(go->GetComponent(COLLIDER)));
 					}
 				}
 			}
 			{
-				int dim = 3;
+				int dim = 4;
 				for (int i = 0; i < dim; ++i) {
 					for (int j = 0; j < dim; ++j) {
 						for (int k = 0; k < dim; ++k) {
@@ -102,13 +99,68 @@ void ObjectFactory::LoadLevel(const char *pFilename,bool objects)
 							pB->Initialize();
 							if (gpPhysicsManager != nullptr && pB)
 								gpPhysicsManager->die.Add(pB);
-							//physics->dAABBTree.AddCollider(static_cast<Collider*>(go->GetComponent(COLLIDER)));
 						}
 					}
 				}
 			}
 		}
-		
+		else
+			if (gpInputManager->isTriggered(SDL_SCANCODE_3))
+			{
+				int NumberOfStacks = 14;
+				int HeightofStack = 5;
+				gpGameObjectManager->mGameobjects.erase(gpGameObjectManager->mGameobjects.begin(), gpGameObjectManager->mGameobjects.end());
+				if (gpPhysicsManager != nullptr)
+				{
+					delete gpPhysicsManager->die.m_root;
+					gpPhysicsManager->die.m_root = nullptr;
+					gpPhysicsManager->die.m_pairs.clear();
+
+					for (int i = 0; i < NumberOfStacks/2; i++) 
+					{
+						for (int j = 0; j < HeightofStack; j++)
+						{
+							GameObject* go = LoadObject("Cube.txt");
+							Body* pB = static_cast<Body*>(go->GetComponent(BODY));
+							Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
+							pTr->mPos = glm::vec3(i * 2.0f, 1.5f * j, -10.0f);
+							pB->Initialize();
+							if (gpPhysicsManager != nullptr && pB)
+								gpPhysicsManager->die.Add(pB);
+						}
+						GameObject* go = LoadObject("Plane.txt");
+						Body* pB = static_cast<Body*>(go->GetComponent(BODY));
+						Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
+						pTr->mPos = glm::vec3(i * 2.0f, -2.0f, -10.0f);
+						pB->Initialize();
+						if (gpPhysicsManager != nullptr && pB)
+							gpPhysicsManager->die.Add(pB);
+					}
+					int z = 0;
+					for (int i = NumberOfStacks/2; i < NumberOfStacks; i++)
+					{
+						for (int j = 0; j < HeightofStack; j++)
+						{
+							GameObject* go = LoadObject("Cube.txt");
+							Body* pB = static_cast<Body*>(go->GetComponent(BODY));
+							Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
+							pTr->mPos = glm::vec3(z * 2.0f, 1.5f * j, -12.0f);
+							pB->Initialize();
+							if (gpPhysicsManager != nullptr && pB)
+								gpPhysicsManager->die.Add(pB);
+						}
+						GameObject* go = LoadObject("Plane.txt");
+						Body* pB = static_cast<Body*>(go->GetComponent(BODY));
+						Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
+						pTr->mPos = glm::vec3(z * 2.0f, -2.0f, -12.0f);
+						pB->Initialize();
+						if (gpPhysicsManager != nullptr && pB)
+							gpPhysicsManager->die.Add(pB);
+						z++;
+					}
+				}
+
+			}
 	}
 }
 

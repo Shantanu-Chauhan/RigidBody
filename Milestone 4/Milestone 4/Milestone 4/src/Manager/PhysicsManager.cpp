@@ -81,13 +81,18 @@ void PhysicsManager::Update(float frameTime)
 	for (auto old : gpCollisionManager->mOldContacts)
 		delete old;
 	gpCollisionManager->mOldContacts.clear();
+	int size = 0;
 	for (std::list<Contact*>::iterator it = gpCollisionManager->mContacts.begin(); it != gpCollisionManager->mContacts.end(); ++it)
 	{
 		Contact* test = new Contact(*(*it));
 		gpCollisionManager->mOldContacts.push_back(test);
+		size += (*it)->ContactPoints.size();
 	}
 	//SEQUENTIAL IMPULSE ENDED
 
+	ImGui::Begin("Total contact points");
+	ImGui::Text("%d", size);
+	ImGui::End();
 	//Updating the position according
 	for (auto go : gpGameObjectManager->mGameobjects)
 	{
@@ -117,7 +122,7 @@ void WarmStart(CollisionManager* gpCollisionManager)
 							float dist = glm::distance2(oldContactManifold->ContactPoints[i], newContactManifold->ContactPoints[j]);
 							if (dist < 0.001f)
 							{
-								printf("%f\n", dist);
+								//printf("%f\n", dist);
 								newContactManifold->lambdaSum[j] = oldContactManifold->lambdaSum[i];
 								newContactManifold->tangentImpulseSum1[j] = oldContactManifold->tangentImpulseSum1[i];
 								newContactManifold->tangentImpulseSum2[j] = oldContactManifold->tangentImpulseSum2[i];

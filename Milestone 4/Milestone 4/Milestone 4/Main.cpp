@@ -147,7 +147,7 @@ int main(int argc, char* args[])
 		printf(SDL_GetError());
 	}
 
-	gpGameObjectFactory->LoadLevel("Title_Screenp.txt");
+	gpGameObjectFactory->LoadLevel("Title_Screenp.txt",false);
 
 	float positions[] = {
 	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,//*	0
@@ -297,7 +297,10 @@ int main(int argc, char* args[])
 			{
 				gpGameObjectFactory->LoadLevel("Title_Screenp.txt", false);
 			}
-
+			if (gpInputManager->isTriggered(SDL_SCANCODE_3))//Load the big level
+			{
+				gpGameObjectFactory->LoadLevel("Title_Screenp.txt", true);
+			}
 			gpEventManager->Update(frameTime);
 
 			for (int i = 0; i < static_cast<int>(gpGameObjectManager->mGameobjects.size()); ++i)
