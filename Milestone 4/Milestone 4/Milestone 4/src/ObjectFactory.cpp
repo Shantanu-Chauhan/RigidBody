@@ -20,7 +20,7 @@ ObjectFactory::~ObjectFactory()
 
 }
 
-void ObjectFactory::LoadLevel(const char *pFilename,bool objects)
+void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 {
 	if (!objects)
 	{
@@ -33,7 +33,7 @@ void ObjectFactory::LoadLevel(const char *pFilename,bool objects)
 
 			gpPhysicsManager->die.m_pairs.clear();
 		}
-		FILE *fp;
+		FILE* fp;
 		std::string fullpath = "..\\..\\Resources\\";
 		fullpath += pFilename;
 		fopen_s(&fp, fullpath.c_str(), "r");
@@ -44,12 +44,12 @@ void ObjectFactory::LoadLevel(const char *pFilename,bool objects)
 				char objectFileName[256] = { 0 };
 				fscanf_s(fp, "%255s\n", objectFileName, (sizeof(objectFileName)));
 				std::string stringObjectFileName = objectFileName;
-				GameObject  *pGameObject = LoadObject(stringObjectFileName.c_str());
-				Transform *pTr = static_cast<Transform*>(pGameObject->GetComponent(TRANSFORM));
+				GameObject* pGameObject = LoadObject(stringObjectFileName.c_str());
+				Transform* pTr = static_cast<Transform*>(pGameObject->GetComponent(TRANSFORM));
 				if (pTr)
 					pTr->Serialize(&fp);
 
-				Body *pBody = static_cast<Body*>(pGameObject->GetComponent(BODY));
+				Body* pBody = static_cast<Body*>(pGameObject->GetComponent(BODY));
 				if (pBody)
 					pBody->Initialize();
 
@@ -75,13 +75,13 @@ void ObjectFactory::LoadLevel(const char *pFilename,bool objects)
 			}
 			int dim = 10;
 			{
-			for (int j = 0; j < dim; ++j) {
-				for (int k = 0; k < dim; ++k) {
-					GameObject* go = LoadObject("Plane.txt");
-					Body* pB = static_cast<Body*>(go->GetComponent(BODY));
-					Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
-					pTr->mPos = glm::vec3(1.0f * j-8.0f, -2.0f, 1.0f * k-25.0f);
-					pB->Initialize();
+				for (int j = 0; j < dim; ++j) {
+					for (int k = 0; k < dim; ++k) {
+						GameObject* go = LoadObject("Plane.txt");
+						Body* pB = static_cast<Body*>(go->GetComponent(BODY));
+						Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
+						pTr->mPos = glm::vec3(1.0f * j - 8.0f, -2.0f, 1.0f * k - 25.0f);
+						pB->Initialize();
 						if (gpPhysicsManager != nullptr && pB)
 							gpPhysicsManager->die.Add(pB);
 					}
@@ -95,7 +95,7 @@ void ObjectFactory::LoadLevel(const char *pFilename,bool objects)
 							GameObject* go = LoadObject("Cube.txt");
 							Body* pB = static_cast<Body*>(go->GetComponent(BODY));
 							Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
-							pTr->mPos = glm::vec3(1.0f * i*-1.5f, 1.0f*j*1.5f, 1.0f * k*1.5f-22.0f);
+							pTr->mPos = glm::vec3(1.0f * i * -1.5f, 1.0f * j * 1.5f, 1.0f * k * 1.5f - 22.0f);
 							pB->Initialize();
 							if (gpPhysicsManager != nullptr && pB)
 								gpPhysicsManager->die.Add(pB);
@@ -116,7 +116,7 @@ void ObjectFactory::LoadLevel(const char *pFilename,bool objects)
 					gpPhysicsManager->die.m_root = nullptr;
 					gpPhysicsManager->die.m_pairs.clear();
 
-					for (int i = 0; i < NumberOfStacks/2; i++) 
+					for (int i = 0; i < NumberOfStacks / 2; i++)
 					{
 						for (int j = 0; j < HeightofStack; j++)
 						{
@@ -137,7 +137,7 @@ void ObjectFactory::LoadLevel(const char *pFilename,bool objects)
 							gpPhysicsManager->die.Add(pB);
 					}
 					int z = 0;
-					for (int i = NumberOfStacks/2; i < NumberOfStacks; i++)
+					for (int i = NumberOfStacks / 2; i < NumberOfStacks; i++)
 					{
 						for (int j = 0; j < HeightofStack; j++)
 						{
@@ -161,13 +161,40 @@ void ObjectFactory::LoadLevel(const char *pFilename,bool objects)
 				}
 
 			}
+			else
+				if (gpInputManager->isTriggered(SDL_SCANCODE_4))
+				{
+					gpGameObjectManager->mGameobjects.erase(gpGameObjectManager->mGameobjects.begin(), gpGameObjectManager->mGameobjects.end());
+					if (gpPhysicsManager != nullptr)
+					{
+
+						delete gpPhysicsManager->die.m_root;
+						gpPhysicsManager->die.m_root = nullptr;
+
+						gpPhysicsManager->die.m_pairs.clear();
+					}
+					GameObject* go = LoadObject("Cube.txt");
+					Body* pB = static_cast<Body*>(go->GetComponent(BODY));
+					Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
+					pTr->mPos = glm::vec3(0.0f, 3.0f, -12.0f);
+					pB->Initialize();
+					if (gpPhysicsManager != nullptr && pB)
+						gpPhysicsManager->die.Add(pB);
+					go = LoadObject("Plane.txt");
+					pB = static_cast<Body*>(go->GetComponent(BODY));
+					pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
+					pTr->mPos = glm::vec3(0.0f, -2.0f, -12.0f);
+					pB->Initialize();
+					if (gpPhysicsManager != nullptr && pB)
+						gpPhysicsManager->die.Add(pB);
+				}
 	}
 }
 
-GameObject* ObjectFactory::LoadObject(const char *pFilename)
+GameObject* ObjectFactory::LoadObject(const char* pFilename)
 {
-	GameObject *pNewGameObject = nullptr;
-	FILE *fp;
+	GameObject* pNewGameObject = nullptr;
+	FILE* fp;
 	std::string fullpath = "..\\..\\Resources\\";//This is the location from the main file
 	fullpath += pFilename;
 	fopen_s(&fp, fullpath.c_str(), "r");
@@ -175,7 +202,7 @@ GameObject* ObjectFactory::LoadObject(const char *pFilename)
 	{
 		char objectname[256] = { 0 };
 		fscanf_s(fp, "%255s\n", objectname, (sizeof(objectname)));
-		std::string ObjectName = objectname; 
+		std::string ObjectName = objectname;
 
 		if (ObjectName == "CUBE")
 			pNewGameObject = new GameObject(CUBE);
@@ -194,7 +221,7 @@ GameObject* ObjectFactory::LoadObject(const char *pFilename)
 			char componentname[256] = { 0 };
 			fscanf_s(fp, "%255s\n", componentname, (sizeof(componentname)));
 			std::string stringComponentName = componentname;
-			Component *pNewComponent = nullptr;
+			Component* pNewComponent = nullptr;
 			if ("Transform" == stringComponentName)
 			{
 				pNewComponent = pNewGameObject->AddComponent(TRANSFORM);
@@ -205,25 +232,25 @@ GameObject* ObjectFactory::LoadObject(const char *pFilename)
 				{
 					pNewComponent = pNewGameObject->AddComponent(SPRITE);
 				}
-			else
-				if ("Controller" == stringComponentName)
-				{
-					pNewComponent = pNewGameObject->AddComponent(CONTROLLER);
-				}
-			else
-				if ("Body" == stringComponentName)
-				{
-					pNewComponent = pNewGameObject->AddComponent(BODY);
-				}
+				else
+					if ("Controller" == stringComponentName)
+					{
+						pNewComponent = pNewGameObject->AddComponent(CONTROLLER);
+					}
+					else
+						if ("Body" == stringComponentName)
+						{
+							pNewComponent = pNewGameObject->AddComponent(BODY);
+						}
 			if (pNewComponent != nullptr)
 				pNewComponent->Serialize(&fp);
 		}
-		if(ObjectName!="DEBUGCUBE")
-		gpGameObjectManager->mGameobjects.push_back(pNewGameObject);
+		if (ObjectName != "DEBUGCUBE")
+			gpGameObjectManager->mGameobjects.push_back(pNewGameObject);
 		else
 			gpGameObjectManager->mDebugCubes.push_back(pNewGameObject);
 		fclose(fp);
-		
+
 	}
 	return pNewGameObject;
 }

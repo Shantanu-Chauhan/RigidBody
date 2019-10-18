@@ -36,9 +36,8 @@ void Body::Serialize(FILE** fpp)
 {
 	fscanf_s(*fpp, "%f\n", &mMass);
 	glm::vec3 Extent;
-	if (mMass != 0.0f)
-		mInvMass = 1.0f / mMass;
-	else if (mMass > 1.0f)
+	mInvMass = 1.0f / mMass;
+	if (mMass > 1.0f)
 	{
 		mMass = std::numeric_limits<float>::infinity();//apply this for static objects i.e objects that do not move
 		mInvMass = 1 / mMass;
@@ -107,7 +106,7 @@ void Body::Initialize()
 	}
 	InertiaTensor = glm::mat3(1.0f);
 	float MOver12 = mMass / 12.0f;
-	if (mMass < 2.0f)
+	//if (mMass < 2.0f)
 	{
 		InertiaTensor[0][0] = MOver12 * (pow(Extent.y, 2) + pow(Extent.z, 2));
 		InertiaTensor[1][1] = MOver12 * (pow(Extent.z, 2) + pow(Extent.x, 2));
@@ -150,11 +149,11 @@ void Body::Integrate(float DeltaTime)//Semi Impicit Euler
 		//Update and normalise the quaternion to make unit length
 		quaternion = glm::normalize(quaternion);
 	}
-	else
-	{
-		mVel.x = mVel.y = mVel.z = 0.0f;
-		AngularVelocity.x = AngularVelocity.y = AngularVelocity.z = 0.0f;
-	}
+	//else
+	//{
+	//	mVel.x = mVel.y = mVel.z = 0.0f;
+	//	AngularVelocity.x = AngularVelocity.y = AngularVelocity.z = 0.0f;
+	//}
 	mTotalForce = glm::vec3(0.0f);//resetting the forces
 	Torque = glm::vec3(0.0f);	  //resetting the forces
 }
@@ -191,6 +190,7 @@ void Body::updatePosition()
 void Body::PositionUpdate(float DeltaTime)
 {
 	//Integrate the position
+
 	if (mMass != 2.0f)
 	{
 		mPos += mVel * DeltaTime;

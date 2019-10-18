@@ -1,12 +1,7 @@
-﻿  PhysicsManager.cpp
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\physicsmanager.cpp(113): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\physicsmanager.cpp(115): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\physicsmanager.cpp(177): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\physicsmanager.cpp(346): warning C4018: '<': signed/unsigned mismatch
-c:\users\pikachu\desktop\rigidbody\milestone 4\milestone 4\milestone 4\src\manager\physicsmanager.cpp(474): warning C4018: '<': signed/unsigned mismatch
+﻿  ObjectFactory.cpp
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  0 of 4246 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  0 of 4272 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
