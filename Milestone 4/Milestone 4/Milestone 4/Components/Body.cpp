@@ -151,11 +151,11 @@ void Body::Integrate(float DeltaTime)//Semi Impicit Euler
 		//Update and normalise the quaternion to make unit length
 		quaternion = glm::normalize(quaternion);
 	}
-	else
-	{
-		mVel.x = mVel.y = mVel.z = 0.0f;
-		AngularVelocity.x = AngularVelocity.y = AngularVelocity.z = 0.0f;
-	}
+	//else
+	//{
+	//	mVel.x = mVel.y = mVel.z = 0.0f;
+	//	AngularVelocity.x = AngularVelocity.y = AngularVelocity.z = 0.0f;
+	//}
 	mTotalForce = glm::vec3(0.0f);//resetting the forces
 	Torque = glm::vec3(0.0f);	  //resetting the forces
 }
@@ -192,6 +192,7 @@ void Body::updatePosition()
 void Body::PositionUpdate(float DeltaTime)
 {
 	//Integrate the position
+
 	if (mMass != 2.0f)
 	{
 		mPos += mVel * DeltaTime;
