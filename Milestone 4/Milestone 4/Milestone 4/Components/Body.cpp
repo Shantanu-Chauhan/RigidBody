@@ -131,7 +131,7 @@ void Body::Integrate(float DeltaTime)//Semi Impicit Euler
 	//Save current position
 	glm::vec3 G = glm::vec3(0.0f, -9.8f, 0.0f);
 
-	if (mMass != 2.0f)//Only integrating the movable objects not the static platform
+	//if (mMass != 2.0f)//Only integrating the movable objects not the static platform
 	{
 		mPrevPos = mPos;
 		//Compute the total force

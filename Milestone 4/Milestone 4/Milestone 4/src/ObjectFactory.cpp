@@ -108,7 +108,7 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 			if (gpInputManager->isTriggered(SDL_SCANCODE_3))
 			{
 				int NumberOfStacks = 30;
-				int HeightofStack = 5;
+				int HeightofStack = 4;
 				gpGameObjectManager->mGameobjects.erase(gpGameObjectManager->mGameobjects.begin(), gpGameObjectManager->mGameobjects.end());
 				if (gpPhysicsManager != nullptr)
 				{
