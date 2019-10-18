@@ -36,13 +36,15 @@ void Body::Serialize(FILE** fpp)
 {
 	fscanf_s(*fpp, "%f\n", &mMass);
 	glm::vec3 Extent;
-	if (mMass != 0.0f)
-		mInvMass = 1.0f / mMass;
-	else if (mMass > 1.0f)
+	//if (mMass != 0.0f)
+	//	mInvMass = 1.0f / mMass;
+	if (mMass > 1.0f)
 	{
 		mMass = std::numeric_limits<float>::infinity();//apply this for static objects i.e objects that do not move
 		mInvMass = 1 / mMass;
 	}
+	else
+		mInvMass = 1 / mMass;
 	char shapeType[256] = { 0 };
 	char quat[256] = { 0 };
 	fscanf_s(*fpp, "%255s\n", shapeType, sizeof(shapeType));
@@ -107,12 +109,11 @@ void Body::Initialize()
 	}
 	InertiaTensor = glm::mat3(1.0f);
 	float MOver12 = mMass / 12.0f;
-	if (mMass < 2.0f)
-	{
-		InertiaTensor[0][0] = MOver12 * (pow(Extent.y, 2) + pow(Extent.z, 2));
-		InertiaTensor[1][1] = MOver12 * (pow(Extent.z, 2) + pow(Extent.x, 2));
-		InertiaTensor[2][2] = MOver12 * (pow(Extent.x, 2) + pow(Extent.y, 2));
-	}
+	
+	InertiaTensor[0][0] = MOver12 * (pow(Extent.y, 2) + pow(Extent.z, 2));
+	InertiaTensor[1][1] = MOver12 * (pow(Extent.z, 2) + pow(Extent.x, 2));
+	InertiaTensor[2][2] = MOver12 * (pow(Extent.x, 2) + pow(Extent.y, 2));
+
 	if (mMass < 2.0f)
 		InertiaInverse = glm::inverse(InertiaTensor);
 	else
