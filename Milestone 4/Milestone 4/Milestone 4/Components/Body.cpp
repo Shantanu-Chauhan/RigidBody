@@ -3,7 +3,7 @@
 #include"Transform.h"
 #include"../src/Game Object.h"
 #include"../src/Manager/CollisionManager.h"
-#include"glm/gtc/matrix_transform.hpp"
+#include <glm/gtx/quaternion.hpp>
 #include"imgui/imgui.h"
 
 Body::Body() :Component(BODY)
@@ -67,14 +67,14 @@ void Body::Serialize(FILE** fpp)
 			{
 				glm::vec3 vert[8] =
 				{
-					glm::vec3(-0.5f, -0.5f,	 0.5f),//0 
-					glm::vec3(0.5f, -0.5f,	 0.5f),//1
-					glm::vec3(0.5f,  0.5f,	 0.5f),//2
-					glm::vec3(-0.5f,  0.5f,	 0.5f),//3
-					glm::vec3(-0.5f, -0.5f,	-0.5f),//4
-					glm::vec3(0.5f, -0.5f,	-0.5f),//5
-					glm::vec3(0.5f,  0.5f,	-0.5f),//6
-					glm::vec3(-0.5f,  0.5f,	-0.5f) //7
+					Extent*glm::vec3(-0.5f, -0.5f,	 0.5f),//0 
+					Extent*glm::vec3(0.5f, -0.5f,	 0.5f),//1
+					Extent*glm::vec3(0.5f,  0.5f,	 0.5f),//2
+					Extent*glm::vec3(-0.5f,  0.5f,	 0.5f),//3
+					Extent*glm::vec3(-0.5f, -0.5f,	-0.5f),//4
+					Extent*glm::vec3(0.5f, -0.5f,	-0.5f),//5
+					Extent*glm::vec3(0.5f,  0.5f,	-0.5f),//6
+					Extent*glm::vec3(-0.5f,  0.5f,	-0.5f) //7
 				};
 
 				for (int i = 0; i < 8; i++)
@@ -95,7 +95,7 @@ void Body::Serialize(FILE** fpp)
 	{
 		fscanf_s(*fpp, "%f %f %f %f\n", &quaternion.x, &quaternion.y, &quaternion.z, &quaternion.w);
 		quaternion = glm::normalize(quaternion);
-		rotationmatrix = glm::mat3_cast(quaternion);
+		rotationmatrix = glm::toMat4(quaternion);
 	}
 }
 
@@ -166,7 +166,7 @@ void Body::updatePosition()
 	Transform* pTr = static_cast<Transform*>(mpOwner->GetComponent(TRANSFORM));
 	shape->Position = mPos;
 	glm::vec3 x, y, z;
-	rotationmatrix = glm::mat3_cast(quaternion);
+	rotationmatrix = glm::toMat4(quaternion);
 	if (pTr != NULL)
 	{
 		pTr->mPos = mPos;
@@ -174,7 +174,7 @@ void Body::updatePosition()
 		x = glm::vec3(shape->LocalExtent.x, 0.0f, 0.0f);
 		y = glm::vec3(0.0f, shape->LocalExtent.y, 0.0f);
 		z = glm::vec3(0.0f, 0.0f, shape->LocalExtent.z);
-		glm::mat3 big = glm::mat3_cast(quaternion);
+		glm::mat3 big = glm::toMat4(quaternion);
 		glm::vec3 newextent = abs(big * x) + abs(big * y) +
 			abs(big * z);
 		shape->Extent = newextent;

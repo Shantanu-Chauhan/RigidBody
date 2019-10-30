@@ -2,6 +2,7 @@
 #include"Component.h"
 #include<string>
 #include"glm/glm.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
 #include"glm/gtc/quaternion.hpp"
 class Shape;
 

@@ -75,20 +75,17 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 			}
 			int dim = 10;
 			{
-				for (int j = 0; j < dim; ++j) {
-					for (int k = 0; k < dim; ++k) {
-						GameObject* go = LoadObject("Plane.txt");
-						Body* pB = static_cast<Body*>(go->GetComponent(BODY));
-						Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
-						pTr->mPos = glm::vec3(1.0f * j - 8.0f, -2.0f, 1.0f * k - 25.0f);
-						pB->Initialize();
-						if (gpPhysicsManager != nullptr && pB)
-							gpPhysicsManager->die.Add(pB);
-					}
-				}
+				GameObject* go = LoadObject("Plane.txt");
+				Body* pB = static_cast<Body*>(go->GetComponent(BODY));
+				Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
+				pTr->mPos = glm::vec3(0.0f , -5.0f, - 25.0f);
+				pB->Initialize();
+				if (gpPhysicsManager != nullptr && pB)
+					gpPhysicsManager->die.Add(pB);
+
 			}
 			{
-				int dim = 4;
+				int dim = 5;
 				for (int i = 0; i < dim; ++i) {
 					for (int j = 0; j < dim; ++j) {
 						for (int k = 0; k < dim; ++k) {
@@ -107,7 +104,7 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 		else
 			if (gpInputManager->isTriggered(SDL_SCANCODE_3))
 			{
-				int NumberOfStacks = 30;
+				int NumberOfStacks = 1;
 				int HeightofStack = 4;
 				gpGameObjectManager->mGameobjects.erase(gpGameObjectManager->mGameobjects.begin(), gpGameObjectManager->mGameobjects.end());
 				if (gpPhysicsManager != nullptr)
@@ -116,6 +113,13 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 					gpPhysicsManager->die.m_root = nullptr;
 					gpPhysicsManager->die.m_pairs.clear();
 
+					GameObject* go = LoadObject("Plane.txt");
+					Body* pB = static_cast<Body*>(go->GetComponent(BODY));
+					Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
+					pTr->mPos = glm::vec3( 0.0f, -2.0f, -10.0f);
+					pB->Initialize();
+					if (gpPhysicsManager != nullptr && pB)
+						gpPhysicsManager->die.Add(pB);
 					for (int i = 0; i < NumberOfStacks / 2; i++)
 					{
 						for (int j = 0; j < HeightofStack; j++)
@@ -128,13 +132,7 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 							if (gpPhysicsManager != nullptr && pB)
 								gpPhysicsManager->die.Add(pB);
 						}
-						GameObject* go = LoadObject("Plane.txt");
-						Body* pB = static_cast<Body*>(go->GetComponent(BODY));
-						Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
-						pTr->mPos = glm::vec3(i * 2.0f, -2.0f, -10.0f);
-						pB->Initialize();
-						if (gpPhysicsManager != nullptr && pB)
-							gpPhysicsManager->die.Add(pB);
+					
 					}
 					int z = 0;
 					for (int i = NumberOfStacks / 2; i < NumberOfStacks; i++)
@@ -149,13 +147,6 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 							if (gpPhysicsManager != nullptr && pB)
 								gpPhysicsManager->die.Add(pB);
 						}
-						GameObject* go = LoadObject("Plane.txt");
-						Body* pB = static_cast<Body*>(go->GetComponent(BODY));
-						Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
-						pTr->mPos = glm::vec3(z * 2.0f, -2.0f, -12.0f);
-						pB->Initialize();
-						if (gpPhysicsManager != nullptr && pB)
-							gpPhysicsManager->die.Add(pB);
 						z++;
 					}
 				}

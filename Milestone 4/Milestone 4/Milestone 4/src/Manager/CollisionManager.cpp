@@ -312,7 +312,7 @@ int HalfEdge::AddFace(int v0, int v1, int v2, int v3)
 			eI->next = faceEdgeIndices[j];
 			eJ->prev = faceEdgeIndices[i];
 		}
-		face->Normal = glm::cross(face->edge->vert->position - face->edge->prev->vert->position, face->edge->next->vert->position - face->edge->vert->position);
+		face->Normal = glm::normalize(glm::cross(face->edge->vert->position - face->edge->prev->vert->position, face->edge->next->vert->position - face->edge->vert->position));
 		//face->Plane = ;
 	} // end of edge creation
 

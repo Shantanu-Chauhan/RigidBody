@@ -337,12 +337,12 @@ int main(int argc, char* args[])
 				ImGui::PopID();
 				ImGui::End();
 			}
+			
+			//Draw All the game objects
+			gpGameObjectManager->DrawObjectDraw(va, ib, shader, debug);
 			//Debug
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-			//Draw All the game objects
-			gpGameObjectManager->DrawObjectDraw(va, ib, shader, debug);
-
 			SDL_GL_SwapWindow(pWindow);
 
 			gpFRC->FrameEnd();

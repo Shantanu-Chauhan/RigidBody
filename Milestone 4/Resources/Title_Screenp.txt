@@ -1,15 +1,5 @@
 Cube.txt
-0.0 1.5 -10.0
-Cube.txt
-0.0 3.0 -10.0
-Cube.txt
-0.0 6.0 -10.0
-Cube.txt
-0.0 4.5 -10.0
-Cube.txt
-0.0 9.0 -10.0
-Cube.txt
-0.0 7.5 -10.0
+0.0 12 -10.0
 Plane.txt
 0.0 0.0 -10.0
 DebugCube.txt
