@@ -52,7 +52,7 @@ void GameObjectManager::DrawObjectDraw(VertexArray& va, IndexBuffer& ib, Shader*
 			glm::mat4 mvp = proj * view * pTR->mTransformDebug;
 			shader->SetUniformMat4f("u_MVP", mvp);
 			shader->SetUniform1i("change", true);
-			//shader->SetUniform4f("color1", pTR->DebugColor.x, pTR->DebugColor.y, pTR->DebugColor.z, pTR->DebugColor.w);// Have to store in the body or somewhere to change when collision occurs
+			shader->SetUniform4f("color1",0.0f, 0.0f, 0.0f, 1.0f);// Have to store in the body or somewhere to change when collision occurs
 			GLCall(glDrawElements(GL_LINE_LOOP, ib.GetCount(), GL_UNSIGNED_INT, NULL));
 		}
 
@@ -80,26 +80,26 @@ void GameObjectManager::DrawObjectDraw(VertexArray& va, IndexBuffer& ib, Shader*
 			}
 		}
 	}
-	/*if (debug) {
-		for (int i = 0; i < mGameobjects.size(); ++i)
-		{
-			Transform* pTR = static_cast<Transform*>(mGameobjects[i]->GetComponent(TRANSFORM));
-			Body* pBody = static_cast<Body*>(mGameobjects[i]->GetComponent(BODY));
-			if (debug)
-			{
-				Sprite* pTex = static_cast<Sprite*>(mGameobjects[i]->GetComponent(SPRITE));
-				Body* pBody = static_cast<Body*>(mGameobjects[i]->GetComponent(BODY));
-				glm::mat4 model = pTR->mTransform;
-				glm::mat4 mvp = proj * view * model;
+	//if (debug) {
+	//	for (int i = 0; i < mGameobjects.size(); ++i)
+	//	{
+	//		Transform* pTR = static_cast<Transform*>(mGameobjects[i]->GetComponent(TRANSFORM));
+	//		Body* pBody = static_cast<Body*>(mGameobjects[i]->GetComponent(BODY));
+	//		if (debug)
+	//		{
+	//			Sprite* pTex = static_cast<Sprite*>(mGameobjects[i]->GetComponent(SPRITE));
+	//			Body* pBody = static_cast<Body*>(mGameobjects[i]->GetComponent(BODY));
+	//			glm::mat4 model = pTR->mTransform;
+	//			glm::mat4 mvp = proj * view * model;
 
-				pTex->mpTexture->Bind();
-				shader->SetUniform1i("u_Texture", 0);
-				shader->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
-				shader->SetUniformMat4f("u_MVP", mvp);
-				gpRenderer->Draw(va, ib, shader, debug);
-			}
-		}
-	}*/
+	//			pTex->mpTexture->Bind();
+	//			shader->SetUniform1i("u_Texture", 0);
+	//			shader->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
+	//			shader->SetUniformMat4f("u_MVP", mvp);
+	//			gpRenderer->Draw(va, ib, shader, debug);
+	//		}
+	//	}
+	//}
 }
 
 void GameObjectManager::DrawTreeDraw(VertexArray& va, IndexBuffer& ib, Shader* shader, bool debug, Node* node)
@@ -115,7 +115,7 @@ void GameObjectManager::DrawTreeDraw(VertexArray& va, IndexBuffer& ib, Shader* s
 		glm::vec4(0.0f,1.0f,0.0f,1.0f),//GREEN
 		glm::vec4(1.0f,1.0f,0.0f,1.0f),//YELLOW
 	};
-	if (node->IsLeaf())
+	if (!node->IsLeaf())
 	{
 
 		glm::mat4 temp = glm::translate(glm::mat4(1.0f), node->AABB.Position);
@@ -123,22 +123,22 @@ void GameObjectManager::DrawTreeDraw(VertexArray& va, IndexBuffer& ib, Shader* s
 		glm::mat4 mvp = proj * view * temp;
 		shader->SetUniformMat4f("u_MVP", mvp);
 		shader->SetUniform1i("change", true);
-		//shader->SetUniform4f("color1", color[node->height].x, color[node->height].y, color[node->height].z, 1.0f);// Have to store in the body or somewhere to change when collision occurs
-		shader->SetUniform4f("color1", color[0].x, color[0].y, color[0].z, 1.0f);// Have to store in the body or somewhere to change when collision occurs
+		shader->SetUniform4f("color1", color[node->height].x, color[node->height].y, color[node->height].z, 1.0f);// Have to store in the body or somewhere to change when collision occurs
+		//shader->SetUniform4f("color1", color[0].x, color[0].y, color[0].z, 1.0f);// Have to store in the body or somewhere to change when collision occurs
 		GLCall(glDrawElements(GL_LINE_LOOP, ib.GetCount(), GL_UNSIGNED_INT, NULL));
 		DrawTreeDraw(va, ib, shader, debug, node->mLeft);
 		DrawTreeDraw(va, ib, shader, debug, node->mRight);
 	}
 	else
 	{
-		//glm::mat4 temp = glm::translate(glm::mat4(1.0f), node->AABB.Position);
-		//temp = glm::scale(temp, node->AABB.Extent);
-		//glm::mat4 mvp = proj * view * temp;
-		//shader->SetUniformMat4f("u_MVP", mvp);
-		//shader->SetUniform1i("change", true);
-		//shader->SetUniform4f("color1", color[node->height].x, color[node->height].y, color[node->height].z, 1.0f);// Have to store in the body or somewhere to change when collision occurs
-		////shader->SetUniform4f("color1", 0.0f, 0.0f, 0.0f, 1.0f);// Have to store in the body or somewhere to change when collision occurs
-		//GLCall(glDrawElements(GL_LINE_LOOP, ib.GetCount(), GL_UNSIGNED_INT, NULL));
+		glm::mat4 temp = glm::translate(glm::mat4(1.0f), node->AABB.Position);
+		temp = glm::scale(temp, node->AABB.Extent);
+		glm::mat4 mvp = proj * view * temp;
+		shader->SetUniformMat4f("u_MVP", mvp);
+		shader->SetUniform1i("change", true);
+		shader->SetUniform4f("color1", color[node->height].x, color[node->height].y, color[node->height].z, 1.0f);// Have to store in the body or somewhere to change when collision occurs
+		//shader->SetUniform4f("color1", 0.0f, 0.0f, 0.0f, 1.0f);// Have to store in the body or somewhere to change when collision occurs
+		GLCall(glDrawElements(GL_LINE_LOOP, ib.GetCount(), GL_UNSIGNED_INT, NULL));
 	}
 }
 

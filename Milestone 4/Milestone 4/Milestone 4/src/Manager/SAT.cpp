@@ -184,7 +184,7 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 	HalfEdge::Edge* Edge2 = nullptr;
 	float sMax = 0.0f;
 
-	const float kRelTol = 0.95f;
+	const float kRelTol = 1.01f;
 	const float kAbsTol = 0.01f;
 	float facemax = std::fmax(aMax, bMax);
 	//creating a bias for edge vs face and choosing one as the axis of penetration
@@ -199,7 +199,7 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 	}
 	else
 	{
-		if (kRelTol * bMax > kAbsTol + aMax)//Face face intersection but favouring B here as reference face
+		if (bMax >= aMax)//Face face intersection but favouring B here as reference face
 		{
 			axis = bAxis;
 			sMax = bMax;
