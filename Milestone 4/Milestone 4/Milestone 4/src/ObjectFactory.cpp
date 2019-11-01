@@ -105,7 +105,7 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 			if (gpInputManager->isTriggered(SDL_SCANCODE_3))
 			{
 				int NumberOfStacks = 1;
-				int HeightofStack = 4;
+				int HeightofStack = 5;
 				gpGameObjectManager->mGameobjects.erase(gpGameObjectManager->mGameobjects.begin(), gpGameObjectManager->mGameobjects.end());
 				if (gpPhysicsManager != nullptr)
 				{
@@ -120,34 +120,19 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 					pB->Initialize();
 					if (gpPhysicsManager != nullptr && pB)
 						gpPhysicsManager->die.Add(pB);
-					for (int i = 0; i < NumberOfStacks / 2; i++)
+					for (int i = 0; i < NumberOfStacks; i++)
 					{
 						for (int j = 0; j < HeightofStack; j++)
 						{
 							GameObject* go = LoadObject("Cube.txt");
 							Body* pB = static_cast<Body*>(go->GetComponent(BODY));
 							Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
-							pTr->mPos = glm::vec3(i * 2.0f, 3.0f * j, -10.0f);
+							pTr->mPos = glm::vec3(i * 2.0f, 10.0f * j, -10.0f);
 							pB->Initialize();
 							if (gpPhysicsManager != nullptr && pB)
 								gpPhysicsManager->die.Add(pB);
 						}
 					
-					}
-					int z = 0;
-					for (int i = NumberOfStacks / 2; i < NumberOfStacks; i++)
-					{
-						for (int j = 0; j < HeightofStack; j++)
-						{
-							GameObject* go = LoadObject("Cube.txt");
-							Body* pB = static_cast<Body*>(go->GetComponent(BODY));
-							Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
-							pTr->mPos = glm::vec3(z * 2.0f, 1.5f * j, -12.0f);
-							pB->Initialize();
-							if (gpPhysicsManager != nullptr && pB)
-								gpPhysicsManager->die.Add(pB);
-						}
-						z++;
 					}
 				}
 

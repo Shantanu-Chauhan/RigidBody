@@ -12,7 +12,8 @@ std::vector<glm::vec3> Project(HalfEdge::Face* ProjectionPlane, std::vector<glm:
 void ContactReduction(std::vector<glm::vec3>& Polygon, std::vector<float>& depths, glm::vec3 refFaceNormal);
 
 extern CollisionManager* gpCollisionManager;
-std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, HalfEdge::Edge* ReferenceFace,bool check = false);
+std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, HalfEdge::Edge* ReferenceFace);
+std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, HalfEdge::Edge* ReferenceFace, bool check);
 float distance(glm::vec3 Normal, glm::vec3 PointonPlane, glm::vec3 Point);//Everything global
 
 int LineLineIntersect(
@@ -187,7 +188,7 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 	const float kAbsTol = 0.01f;
 	float facemax = std::fmax(aMax, bMax);
 	//creating a bias for edge vs face and choosing one as the axis of penetration
-	if (kRelTol*eMax > kAbsTol+facemax )//Taking edge edge intersection
+	if (kRelTol * eMax > kAbsTol + facemax)//Taking edge edge intersection
 	{
 		E1 = MaxIndex1;
 		E2 = MaxIndex2;
@@ -198,7 +199,7 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 	}
 	else
 	{
-		if (kRelTol*bMax > kAbsTol+ aMax )//Face face intersection but favouring B here as reference face
+		if (kRelTol * bMax > kAbsTol + aMax)//Face face intersection but favouring B here as reference face
 		{
 			axis = bAxis;
 			sMax = bMax;
@@ -232,22 +233,22 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 			}
 		}
 		else//B is reference
+		{
+			glm::vec3 FaceNormal = ShapeB->structure.m_faces[axis]->Normal;
+			FaceNormal = B->rotationmatrix * FaceNormal;
+			float mindist = std::numeric_limits<float>::infinity();
+			for (int i = 0; i < ShapeA->structure.m_faces.size(); i++)
 			{
-				glm::vec3 FaceNormal = ShapeB->structure.m_faces[axis]->Normal;
-				FaceNormal = B->rotationmatrix * FaceNormal;
-				float mindist = std::numeric_limits<float>::infinity();
-				for (int i = 0; i < ShapeA->structure.m_faces.size(); i++)
+				glm::vec3 ANormal = ShapeA->structure.m_faces[i]->Normal;
+				float distance = glm::dot(FaceNormal, A->rotationmatrix * ANormal);
+				if (distance < mindist)
 				{
-					glm::vec3 ANormal = ShapeA->structure.m_faces[i]->Normal;
-					float distance = glm::dot(FaceNormal, A->rotationmatrix * ANormal);
-					if (distance < mindist)
-					{
-						IncidentFace = ShapeA->structure.m_faces[i];
-						incidentIndex = i;
-						mindist = distance;
-					}
+					IncidentFace = ShapeA->structure.m_faces[i];
+					incidentIndex = i;
+					mindist = distance;
 				}
 			}
+		}
 	}//Incident face is found
 
 	else//Edge edge collision was detected 
@@ -358,27 +359,28 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 		Polygon.push_back(facevert);
 		//all vertices pushed now these will be clipped with the adjacent faces to the reference face
 
-		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge);
-		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->next);
-		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->next->next);
-		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->next->next->next);
-	/*	if (Polygon.size() < 4)
-		{
-			printf("test");
-		}*/
+		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge, false);
+		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->next, false);
+		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->next->next, false);
+		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->next->next->next,false);
+		/*	if (Polygon.size() < 4)
+			{
+				printf("test");
+			}*/
 
-		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->twin);
+		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->twin, true);
+		//Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->twin);
 		//^^^^^^^The final points are also clipped against the reference face so as to get the points on or behind the reference face
-	/*	if (Polygon.size() < 4)
+		if (Polygon.size() < 4)
 		{
-			printf("test");
-		}*/
+			//printf("Less than 4 contact points \n");
+		}
 		glm::vec3 ReferenceNormal = ReferenceFace->Normal;
 		ReferenceNormal = Manifold->mBodies[0]->rotationmatrix * ReferenceNormal;
 		//Now depth is calulated and pushed for every point
 		std::vector<float> depths;
 		std::vector<glm::vec3> points;
-	
+
 		for (int i = 0; i < Polygon.size(); i++)
 		{
 			glm::vec3 PointOnPlane = ReferenceFace->edge->vert->position;
@@ -390,7 +392,7 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 		}
 
 		ContactReduction(points, depths, ReferenceNormal);
-	
+
 
 		for (int i = 0; i < points.size(); i++)
 		{
@@ -450,30 +452,25 @@ float distance(glm::vec3 Normal, glm::vec3 PointonPlane, glm::vec3 Point)//Calcu
 
 
 
-std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, HalfEdge::Edge* ReferenceFace,bool check)
+std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, HalfEdge::Edge* ReferenceFace)
 {
-	float test = 0.0f;
-	if (check)
-	{
-		test = 0.00101f;
-	}
 	std::vector<glm::vec3> Out;
 	if (Polygon.empty())
 		return Out;
 	glm::vec3 StartVertex = Polygon.back();
 	glm::vec3 Normal = Manifold->mBodies[0]->rotationmatrix * ReferenceFace->twin->face->Normal;
 	glm::vec3 PointOnPlane = (Manifold->mBodies[0]->rotationmatrix * ReferenceFace->vert->position)
-		+ Manifold->mBodies[0]->mPos - Normal*test ;
+		+ Manifold->mBodies[0]->mPos;// +(-Normal * test1);
 	//Transforming the local point to global space
-	double distance1 = distance(Manifold->mBodies[0]->rotationmatrix * ReferenceFace->twin->face->Normal,
-		PointOnPlane, StartVertex);
+	float distance1 = distance(Normal, PointOnPlane, StartVertex);
 	for (int i = 0; i < Polygon.size(); i++)
 	{
 		glm::vec3 endVertex = Polygon[i];
-		double distance2 = distance(Normal,PointOnPlane, endVertex);
+		float distance2 = distance(Normal, PointOnPlane, endVertex);
 
 		//if (signbit(distance1) && signbit(distance2 ))//Both points are behind or on the reference face
-		if (distance1<= 0.0f && distance2 <=0.0f)//Both points are behind or on the reference face
+
+		if (distance1 <= 0.0f && distance2 <= 0.0f)//Both points are behind or on the reference face
 		{
 			Out.push_back(endVertex);//take the end point
 		}
@@ -493,6 +490,75 @@ std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, H
 				Out.push_back(IntersectPoint);
 				Out.push_back(endVertex);//as well as the end point
 			}
+		StartVertex = endVertex;//so that you dont need to calculate them again and again
+		distance1 = distance2;	//so that you dont need to calculate them again and again
+	}
+	return Out;//the points after clipping
+}
+
+
+std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, HalfEdge::Edge* ReferenceFace, bool check)
+{
+	float test = 0.0f;
+	float test1 = 0.0f;
+	if (check)
+	{
+		//test = 0.00101f;
+		test = 0.005;
+	}
+	std::vector<glm::vec3> Out;
+	if (Polygon.empty())
+		return Out;
+	glm::vec3 StartVertex = Polygon.back();
+	glm::vec3 Normal = Manifold->mBodies[0]->rotationmatrix * ReferenceFace->twin->face->Normal;
+	glm::vec3 PointOnPlane = (Manifold->mBodies[0]->rotationmatrix * ReferenceFace->vert->position)
+		+ Manifold->mBodies[0]->mPos;// +(-Normal * test1);
+	//Transforming the local point to global space
+	float distance1 = distance(Normal, PointOnPlane, StartVertex);
+	for (int i = 0; i < Polygon.size(); i++)
+	{
+		glm::vec3 endVertex = Polygon[i];
+		float distance2 = distance(Normal, PointOnPlane, endVertex);
+
+		//if (signbit(distance1) && signbit(distance2 ))//Both points are behind or on the reference face
+		if (distance1 < 0.0f - test && distance2 > 0.0f )//Start point is behind end point is in front
+		{
+			//changed
+			float fraction = distance2 / (distance2 - distance1);
+			glm::vec3 IntersectPoint = endVertex + fraction * (StartVertex - endVertex);
+			//Take the point of intersection only
+			Out.push_back(IntersectPoint);
+
+		}
+		else//new
+			if (distance1 < 0.0f - test && ((distance2 <= 0.0f) && (distance2 >= 0.0f - test)))
+			{
+				Out.push_back(endVertex);
+			}
+			else if (distance1 > 0.0f && distance2 < 0.0f - test)//Start point is in from and end point is behind
+			{
+				//changed
+				float fraction = distance1 / (distance1 - distance2);
+				glm::vec3 IntersectPoint = StartVertex + fraction * (endVertex - StartVertex);//take the intersection point
+				Out.push_back(IntersectPoint);
+				Out.push_back(endVertex);//as well as the end point
+			}
+			else//new
+				if (((distance1 <= 0.0f) && (distance1 >= 0.0f - test)) && distance2 < 0.0f - test)
+				{
+					Out.push_back(StartVertex);
+					Out.push_back(endVertex);
+				}
+				else
+					if (distance1 < 0.0f - test && distance2 < 0.0f - test)//Both points are behind or on the reference face
+					{
+						Out.push_back(endVertex);//take the end point
+					}
+					else//new
+						if (((distance1 <= 0.0f) && (distance1 >= 0.0f - test)) && ((distance2 <= 0.0f) && (distance2 >= 0.0f - test)))
+						{
+							Out.push_back(endVertex);
+						}
 		StartVertex = endVertex;//so that you dont need to calculate them again and again
 		distance1 = distance2;	//so that you dont need to calculate them again and again
 	}
