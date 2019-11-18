@@ -142,6 +142,7 @@
     <ClCompile Include="Components\Body.cpp" />
     <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="Components\Controller.cpp" />
+    <ClCompile Include="Components\Joint.cpp" />
     <ClCompile Include="Components\Sprite.cpp" />
     <ClCompile Include="Components\Transform.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Components\Body.h" />
     <ClInclude Include="Components\Component.h" />
     <ClInclude Include="Components\Controller.h" />
+    <ClInclude Include="Components\Joint.h" />
     <ClInclude Include="Components\Sprite.h" />
     <ClInclude Include="Components\Transform.h" />
     <ClInclude Include="src\Camera.h" />

@@ -359,10 +359,10 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 		Polygon.push_back(facevert);
 		//all vertices pushed now these will be clipped with the adjacent faces to the reference face
 
-		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge, false);
+		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge,false);
 		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->next, false);
 		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->next->next, false);
-		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->next->next->next,false);
+		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->next->next->next, false);
 		/*	if (Polygon.size() < 4)
 			{
 				printf("test");
@@ -524,8 +524,8 @@ std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, H
 		if (distance1 < 0.0f - test && distance2 > 0.0f )//Start point is behind end point is in front
 		{
 			//changed
-			float fraction = distance2 / (distance2 - distance1);
-			glm::vec3 IntersectPoint = endVertex + fraction * (StartVertex - endVertex);
+			float fraction = distance1 / (distance1 - distance2);
+			glm::vec3 IntersectPoint = StartVertex + fraction * (endVertex - StartVertex);
 			//Take the point of intersection only
 			Out.push_back(IntersectPoint);
 

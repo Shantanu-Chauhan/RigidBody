@@ -1,6 +1,7 @@
-Joint2.txt
-Joint1.txt
+Cube.txt
+0.0 12 -10.0
 Plane.txt
+0.0 0.0 -10.0
 DebugCube.txt
 DebugCube.txt
 DebugCube.txt

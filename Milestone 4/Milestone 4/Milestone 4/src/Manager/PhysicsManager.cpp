@@ -3,17 +3,19 @@
 #include"Game Object Manager.h"
 #include"../Game Object.h"
 #include"../../Components/Body.h"
+#include"../../Components/Joint.h"
 #include"CollisionManager.h"
 #include"../../Components/Transform.h"
 #include"../../src/ObjectFactory.h"
 #include"../../src/Global_Header.h"
+#include "glm/gtx/matrix_cross_product.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/norm.hpp"
 #include"imgui/imgui.h"
 
 const float FRICTION = 0.002f;
 //const float baumguarte = 0.15f;
-const float baumguarte = 0.1f;
+const float baumguarte = 0.2f;
 const float slop = 0.005f;
 
 extern GameObjectManager* gpGameObjectManager;
@@ -23,7 +25,6 @@ extern int score;
 void PreStep(CollisionManager* gpCollisionManager, float frameTime);
 void WarmStart(CollisionManager* gpCollisionManager);
 void ApplyImpulseToContacts(CollisionManager* gpCollisionManager, float frameTime);
-void ApplyFrictionToContacts(CollisionManager* gpCollisionManager, float frameTime);
 
 float Gravity = 9.8f;
 
@@ -36,6 +37,31 @@ PhysicsManager::PhysicsManager()
 		//Adding the bodies to the tree when the physics manager is initialized
 		Body* pBody1 = static_cast<Body*>(c->GetComponent(BODY));
 		die.Add(pBody1);
+	}
+	for (int i = 0; i < gpGameObjectManager->mGameobjects.size(); i++)
+	{
+		Joint* pJoint1 = static_cast<Joint*>(gpGameObjectManager->mGameobjects[i]->GetComponent(JOINT));
+		if (pJoint1 == nullptr)
+			continue;
+		for (int j = i; j < gpGameObjectManager->mGameobjects.size(); j++)
+		{
+			Joint* pJoint2 = static_cast<Joint*>(gpGameObjectManager->mGameobjects[j]->GetComponent(JOINT));
+			if (pJoint2 == nullptr)
+				continue;
+			if (pJoint1->jointNumber == pJoint2->jointNumber)
+			{
+				if (gpGameObjectManager->mGameobjects[i] != gpGameObjectManager->mGameobjects[j])
+				{
+					Body* pBody1 = static_cast<Body*>(gpGameObjectManager->mGameobjects[i]->GetComponent(BODY));
+					Body* pBody2 = static_cast<Body*>(gpGameObjectManager->mGameobjects[j]->GetComponent(BODY));
+					pJoint1->localPoint = (pJoint1->localPoint - pBody1->mPos) * glm::transpose(pBody1->rotationmatrix);
+					pJoint2->localPoint = (pJoint2->localPoint - pBody2->mPos) * glm::transpose(pBody2->rotationmatrix);
+					jointPairList.push_back(
+						std::make_pair(gpGameObjectManager->mGameobjects[i], gpGameObjectManager->mGameobjects[j])
+					);//Make pairs and push
+				}
+			}
+		}
 	}
 
 }
@@ -55,7 +81,7 @@ void PhysicsManager::Update(float frameTime)
 	for (auto c : die.m_pairs)
 	{
 		//Doing SAT for the pairs that got detected as potentially colliding pairs in dynamic AABB tree
-		if (c.first->mMass < 2.0f || c.second->mMass < 2.0f)//Not doing SAT for the floor which has mass 2.0f
+		if (c.first->mMass < 100.0f || c.second->mMass < 100.0f)//Not doing SAT for the floor which has mass 2.0f
 			sat.IntersectionTest(c.first, c.second);
 	}
 
@@ -78,7 +104,7 @@ void PhysicsManager::Update(float frameTime)
 	WarmStart(gpCollisionManager);
 	PreStep(gpCollisionManager, frameTime);
 	ApplyImpulseToContacts(gpCollisionManager, frameTime);
-	//ApplyFrictionToContacts(gpCollisionManager, frameTime);
+	SolveJoints(frameTime);
 
 	//Copy the contact manifold to the old one
 	//for (int i = 0; i< gpCollisionManager->mContacts.size(); ++i)
@@ -138,6 +164,60 @@ void WarmStart(CollisionManager* gpCollisionManager)
 		}
 	}
 }
+
+void PhysicsManager::SolveJoints(float frameTime)
+{
+	for (int i = 0; i < 1; i++)
+	{
+		for (auto j : jointPairList)
+		{
+
+			ImGui::Begin("RELATIVE");
+			GameObject* pGameObject1 = j.first;
+			GameObject* pGameObject2 = j.second;
+			Joint* pJoint1 = static_cast<Joint*>(pGameObject1->GetComponent(JOINT));
+			Joint* pJoint2 = static_cast<Joint*>(pGameObject2->GetComponent(JOINT));
+			Body* pBody1 = static_cast<Body*>(pGameObject1->GetComponent(BODY));
+			Body* pBody2 = static_cast<Body*>(pGameObject2->GetComponent(BODY));
+			glm::vec3 ri = pJoint1->localPoint;
+			ri = pBody1->rotationmatrix * ri;
+			//ri = ri;
+
+			glm::vec3 rj = pJoint2->localPoint;
+			rj = pBody2->rotationmatrix * rj;
+			//rj = rj - pBody2->mPos;
+
+			//Relative velocity
+			//glm::vec3 Ck = pBody1->mVel + (glm::cross(pBody1->AngularVelocity, ri)) - pBody2->mVel - (glm::cross(pBody2->AngularVelocity, rj));
+			glm::vec3 Ck = pBody1->mVel - (glm::matrixCross3(ri) * pBody1->AngularVelocity) - pBody2->mVel + (glm::matrixCross3(rj) * pBody2->AngularVelocity);
+			glm::mat3 Kj, Ki;
+			ImGui::Text("relative 1 - x:%f,y:%f,z:%f", Ck.x, Ck.y, Ck.z);
+
+			Kj = (pBody2->mInvMass * glm::mat3(1.0f)) - (glm::matrixCross3(rj) * (pBody2->WorldSpaceInertia) * glm::matrixCross3(rj));
+			Ki = (pBody1->mInvMass * glm::mat3(1.0f)) - (glm::matrixCross3(ri) * (pBody1->WorldSpaceInertia) * glm::matrixCross3(ri));
+
+			glm::mat3 K = Kj + Ki;
+
+			glm::vec3 delP = pBody2->mPos + rj - pBody1->mPos - ri;
+			glm::vec3  bias = (0.8f) * 60.0f * delP;
+
+			glm::vec3 Impulse = glm::inverse(K) * (bias - Ck);
+
+			glm::vec3 linear1, linear2;
+			linear1 = Impulse * pBody1->mInvMass;
+			linear2 = -Impulse * pBody2->mInvMass;
+			pBody1->mVel += linear1;
+			pBody2->mVel += linear2;
+			glm::vec3 angular1, angular2;
+			angular1 = (pBody1->WorldSpaceInertia) * (glm::cross(ri, Impulse));
+			angular2 = -(pBody2->WorldSpaceInertia) * (glm::cross(rj, Impulse));
+			pBody1->AngularVelocity += angular1;
+			pBody2->AngularVelocity += angular2;
+			ImGui::End();
+		}
+	}
+}
+
 
 void PreStep(CollisionManager* gpCollisionManager, float frameTime)
 {
@@ -365,7 +445,7 @@ void ApplyImpulseToContacts(CollisionManager* gpCollisionManager, float frameTim
 				Velocity(11, 0) = c->mBodies[1]->AngularVelocity.z;
 
 				float numerator = Jacobian * Velocity;
-				float b = baumguarte/ frameTime * std::min(c->PenetrationDepth[i] + slop, 0.0f);//SLOP
+				float b = baumguarte / frameTime * std::min(c->PenetrationDepth[i] + slop, 0.0f);//SLOP
 				//float b = 0.3f/frameTime*(c->PenetrationDepth[i]);//Without slop
 
 				//Calculating the Lambda

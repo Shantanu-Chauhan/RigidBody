@@ -38,7 +38,7 @@ void Body::Serialize(FILE** fpp)
 	glm::vec3 Extent;
 	//if (mMass != 0.0f)
 	//	mInvMass = 1.0f / mMass;
-	if (mMass > 1.0f)
+	if (mMass > 100.0f)
 	{
 		mMass = std::numeric_limits<float>::infinity();//apply this for static objects i.e objects that do not move
 		mInvMass = 1 / mMass;
@@ -114,7 +114,7 @@ void Body::Initialize()
 	InertiaTensor[1][1] = MOver12 * (pow(Extent.z, 2) + pow(Extent.x, 2));
 	InertiaTensor[2][2] = MOver12 * (pow(Extent.x, 2) + pow(Extent.y, 2));
 
-	if (mMass < 2.0f)
+	if (mMass < 100.0f)
 		InertiaInverse = glm::inverse(InertiaTensor);
 	else
 	{
@@ -130,6 +130,7 @@ void Body::Integrate(float DeltaTime)//Semi Impicit Euler
 {
 	//Save current position
 	glm::vec3 G = glm::vec3(0.0f, -9.8f, 0.0f);
+	//glm::vec3 G = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	//if (mMass != 2.0f)//Only integrating the movable objects not the static platform
 	{
@@ -193,7 +194,7 @@ void Body::PositionUpdate(float DeltaTime)
 {
 	//Integrate the position
 
-	if (mMass != 2.0f)
+	if (mMass < 100.0f)
 	{
 		mPos += mVel * DeltaTime;
 	}

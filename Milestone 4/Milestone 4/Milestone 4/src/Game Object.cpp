@@ -3,6 +3,7 @@
 #include"../Components/Transform.h"
 #include"../Components/Controller.h"
 #include"../Components/Body.h"
+#include"../Components/Joint.h"
 
 #include"../Shader.h"
 #include<stdio.h>
@@ -54,6 +55,9 @@ Component* GameObject::AddComponent(unsigned int Type)
 		break;
 	case BODY:
 		pNewComponent = new Body();
+		break;
+	case JOINT:
+		pNewComponent = new Joint();
 		break;
 	}
 

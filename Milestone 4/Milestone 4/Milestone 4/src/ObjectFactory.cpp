@@ -104,8 +104,8 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 		else
 			if (gpInputManager->isTriggered(SDL_SCANCODE_3))
 			{
-				int NumberOfStacks = 1;
-				int HeightofStack = 6;
+				int NumberOfStacks = 40;
+				int HeightofStack = 5;
 				gpGameObjectManager->mGameobjects.erase(gpGameObjectManager->mGameobjects.begin(), gpGameObjectManager->mGameobjects.end());
 				if (gpPhysicsManager != nullptr)
 				{
@@ -127,7 +127,7 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 							GameObject* go = LoadObject("Cube.txt");
 							Body* pB = static_cast<Body*>(go->GetComponent(BODY));
 							Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
-							pTr->mPos = glm::vec3(i * 2.0f, 30.0f * j, -10.0f);
+							pTr->mPos = glm::vec3(i * 2.0f, 1.0f * j, -10.0f);
 							pB->Initialize();
 							if (gpPhysicsManager != nullptr && pB)
 								gpPhysicsManager->die.Add(pB);
@@ -218,6 +218,11 @@ GameObject* ObjectFactory::LoadObject(const char* pFilename)
 						{
 							pNewComponent = pNewGameObject->AddComponent(BODY);
 						}
+						else
+							if ("Joint" == stringComponentName)
+							{
+								pNewComponent = pNewGameObject->AddComponent(JOINT);
+							}
 			if (pNewComponent != nullptr)
 				pNewComponent->Serialize(&fp);
 		}

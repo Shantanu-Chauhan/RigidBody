@@ -238,7 +238,7 @@ void DynamicTree::SelfQuery(Node * A, Node * B)//Final stage of the recursion ga
 	{
 		if (Collidesss(A->AABB, B->AABB))//Leafs fat aabbs are being checked for collision
 		{
-			if(A->mClientData->mMass<2.0f || B->mClientData->mMass<2.0f)//This is here so that non moving objetcs are not pushed to check in narrow phase
+			if(A->mClientData->mMass<100.0f || B->mClientData->mMass<100.0f)//This is here so that non moving objetcs are not pushed to check in narrow phase
 			m_pairs.push_back(
 				std::make_pair(A->mClientData, B->mClientData));//Make pairs and push
 		}

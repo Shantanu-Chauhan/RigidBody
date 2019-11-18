@@ -117,6 +117,9 @@
     <ClCompile Include="src\Manager\PhysicsManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Components\Joint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ObjectFactory.h">
@@ -951,6 +954,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Manager\SAT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Joint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

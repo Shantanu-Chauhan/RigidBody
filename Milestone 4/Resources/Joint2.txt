@@ -1,11 +1,13 @@
-PLANE
+CUBE
 Transform
-0.0 -20.0 0.0 1000.0 1.0 1000.0
+1.1 0.0 0.0 1.0 1.0 1.0
 Sprite
 happy.png
 Controller
+Joint
+0.55 0.55 0.55 1
 Body
-200.0
+1.0
 AABB
 quaternion
 0.0 0.0 0.0 1.0

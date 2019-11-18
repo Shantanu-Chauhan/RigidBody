@@ -244,7 +244,7 @@ int main(int argc, char* args[])
 		gpPhysicsManager = new PhysicsManager();//Keep this after level loading so that bodies can be pushed into the broad phase
 		// Game loop
 		bool reverse = false;
-		bool pause = false;
+		bool pause = true;
 		float deltaTime = 0.016f;
 		bool debug = false;
 		bool step = false;
@@ -333,7 +333,9 @@ int main(int argc, char* args[])
 				ImGui::PushID(pBody);
 				ImGui::SliderFloat3("Location:", &pBody->mPos.x, -5.0f, 5.0f);
 				ImGui::SliderFloat4("Quat:", &pBody->quaternion.x, -1.0f, 1.0f);
-				ImGui::Text("Angular - x-%f,y-%f,z-%f", pBody->AngularVelocity.x, pBody->AngularVelocity.y, pBody->AngularVelocity.z);
+				ImGui::SliderFloat4("Vel:", &pBody->mVel.x, -10.0f, 10.0f);
+				ImGui::SliderFloat4("angular", &pBody->AngularVelocity.x, -2.0f, 2.0f);
+				//ImGui::Text("Angular - x-%f,y-%f,z-%f", pBody->AngularVelocity.x, pBody->AngularVelocity.y, pBody->AngularVelocity.z);
 				ImGui::PopID();
 				ImGui::End();
 			}
