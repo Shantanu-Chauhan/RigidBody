@@ -25,6 +25,7 @@ extern int score;
 void PreStep(CollisionManager* gpCollisionManager, float frameTime);
 void WarmStart(CollisionManager* gpCollisionManager);
 void ApplyImpulseToContacts(CollisionManager* gpCollisionManager, float frameTime);
+void ApplyImpulseToJoint(glm::vec3 joint1, glm::vec3 joint2, Body* pBody1, Body* pBody2, float frameTime);
 
 float Gravity = 9.8f;
 
@@ -54,8 +55,11 @@ PhysicsManager::PhysicsManager()
 				{
 					Body* pBody1 = static_cast<Body*>(gpGameObjectManager->mGameobjects[i]->GetComponent(BODY));
 					Body* pBody2 = static_cast<Body*>(gpGameObjectManager->mGameobjects[j]->GetComponent(BODY));
-					pJoint1->localPoint = (pJoint1->localPoint - pBody1->mPos) * glm::transpose(pBody1->rotationmatrix);
-					pJoint2->localPoint = (pJoint2->localPoint - pBody2->mPos) * glm::transpose(pBody2->rotationmatrix);
+					for (int i = 0; i < pJoint1->mAnchorPoints.size(); i++)
+					{
+						pJoint1->mAnchorPoints[i] = (pJoint1->mAnchorPoints[i] - pBody1->mPos) * glm::transpose(pBody1->rotationmatrix);
+						pJoint2->mAnchorPoints[i] = (pJoint2->mAnchorPoints[i] - pBody2->mPos) * glm::transpose(pBody2->rotationmatrix);
+					}
 					jointPairList.push_back(
 						std::make_pair(gpGameObjectManager->mGameobjects[i], gpGameObjectManager->mGameobjects[j])
 					);//Make pairs and push
@@ -165,55 +169,61 @@ void WarmStart(CollisionManager* gpCollisionManager)
 	}
 }
 
+void ApplyImpulseToJoint(glm::vec3 joint1, glm::vec3 joint2, Body* pBody1, Body* pBody2, float frameTime)
+{
+	ImGui::Begin("RELATIVE");
+	//rj = rj - pBody2->mPos;
+
+	//Relative velocity
+	//glm::vec3 Ck = pBody1->mVel + (glm::cross(pBody1->AngularVelocity, ri)) - pBody2->mVel - (glm::cross(pBody2->AngularVelocity, rj));
+	glm::vec3 Ck = pBody1->mVel - (glm::matrixCross3(joint1) * pBody1->AngularVelocity) - pBody2->mVel + (glm::matrixCross3(joint2) * pBody2->AngularVelocity);
+	glm::mat3 Kj, Ki;
+	ImGui::Text("relative 1 - x:%f,y:%f,z:%f", Ck.x, Ck.y, Ck.z);
+
+	Kj = (pBody2->mInvMass * glm::mat3(1.0f)) - (glm::matrixCross3(joint2) * (pBody2->WorldSpaceInertia) * glm::matrixCross3(joint2));
+	Ki = (pBody1->mInvMass * glm::mat3(1.0f)) - (glm::matrixCross3(joint1) * (pBody1->WorldSpaceInertia) * glm::matrixCross3(joint1));
+
+	glm::mat3 K = Kj + Ki;
+
+	glm::vec3 delP = pBody2->mPos + joint2 - pBody1->mPos - joint1;
+	glm::vec3  bias = (0.8f) / frameTime * delP;
+
+	glm::vec3 Impulse = glm::inverse(K) * (bias - Ck);
+
+	glm::vec3 linear1, linear2;
+	linear1 = Impulse * pBody1->mInvMass;
+	linear2 = -Impulse * pBody2->mInvMass;
+	pBody1->mVel += linear1;
+	pBody2->mVel += linear2;
+	glm::vec3 angular1, angular2;
+	angular1 = (pBody1->WorldSpaceInertia) * (glm::cross(joint1, Impulse));
+	angular2 = -(pBody2->WorldSpaceInertia) * (glm::cross(joint2, Impulse));
+	pBody1->AngularVelocity += angular1;
+	pBody2->AngularVelocity += angular2;
+	ImGui::End();
+
+}
+
 void PhysicsManager::SolveJoints(float frameTime)
 {
 	for (int i = 0; i < 1; i++)
 	{
 		for (auto j : jointPairList)
 		{
-
-			ImGui::Begin("RELATIVE");
 			GameObject* pGameObject1 = j.first;
 			GameObject* pGameObject2 = j.second;
 			Joint* pJoint1 = static_cast<Joint*>(pGameObject1->GetComponent(JOINT));
 			Joint* pJoint2 = static_cast<Joint*>(pGameObject2->GetComponent(JOINT));
 			Body* pBody1 = static_cast<Body*>(pGameObject1->GetComponent(BODY));
 			Body* pBody2 = static_cast<Body*>(pGameObject2->GetComponent(BODY));
-			glm::vec3 ri = pJoint1->localPoint;
-			ri = pBody1->rotationmatrix * ri;
-			//ri = ri;
-
-			glm::vec3 rj = pJoint2->localPoint;
-			rj = pBody2->rotationmatrix * rj;
-			//rj = rj - pBody2->mPos;
-
-			//Relative velocity
-			//glm::vec3 Ck = pBody1->mVel + (glm::cross(pBody1->AngularVelocity, ri)) - pBody2->mVel - (glm::cross(pBody2->AngularVelocity, rj));
-			glm::vec3 Ck = pBody1->mVel - (glm::matrixCross3(ri) * pBody1->AngularVelocity) - pBody2->mVel + (glm::matrixCross3(rj) * pBody2->AngularVelocity);
-			glm::mat3 Kj, Ki;
-			ImGui::Text("relative 1 - x:%f,y:%f,z:%f", Ck.x, Ck.y, Ck.z);
-
-			Kj = (pBody2->mInvMass * glm::mat3(1.0f)) - (glm::matrixCross3(rj) * (pBody2->WorldSpaceInertia) * glm::matrixCross3(rj));
-			Ki = (pBody1->mInvMass * glm::mat3(1.0f)) - (glm::matrixCross3(ri) * (pBody1->WorldSpaceInertia) * glm::matrixCross3(ri));
-
-			glm::mat3 K = Kj + Ki;
-
-			glm::vec3 delP = pBody2->mPos + rj - pBody1->mPos - ri;
-			glm::vec3  bias = (0.8f) * 60.0f * delP;
-
-			glm::vec3 Impulse = glm::inverse(K) * (bias - Ck);
-
-			glm::vec3 linear1, linear2;
-			linear1 = Impulse * pBody1->mInvMass;
-			linear2 = -Impulse * pBody2->mInvMass;
-			pBody1->mVel += linear1;
-			pBody2->mVel += linear2;
-			glm::vec3 angular1, angular2;
-			angular1 = (pBody1->WorldSpaceInertia) * (glm::cross(ri, Impulse));
-			angular2 = -(pBody2->WorldSpaceInertia) * (glm::cross(rj, Impulse));
-			pBody1->AngularVelocity += angular1;
-			pBody2->AngularVelocity += angular2;
-			ImGui::End();
+			for (int i = 0; i < pJoint1->mAnchorPoints.size(); i++)
+			{
+				glm::vec3 joint1 = pJoint1->mAnchorPoints[i];
+				joint1 = pBody1->rotationmatrix * joint1;
+				glm::vec3 joint2 = pJoint2->mAnchorPoints[i];
+				joint2 = pBody2->rotationmatrix * joint2;
+				ApplyImpulseToJoint(joint1, joint2, pBody1, pBody2, frameTime);
+			}
 		}
 	}
 }

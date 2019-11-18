@@ -2,12 +2,26 @@
 
 Joint::Joint() : Component(JOINT)
 {
-	localPoint = glm::vec3(0.0f);
 	jointNumber = 0;
 }
 
 void Joint::Serialize(FILE** fpp)
 {
-	fscanf_s(*fpp, "%f %f %f\n", &localPoint.x, &localPoint.y, &localPoint.z);
+	char JointType[256] = { 0 };
+	fscanf_s(*fpp, "%255s\n", JointType, sizeof(JointType));
+	if (strcmp(JointType, "BallAndSocket") == 0)
+	{
+		glm::vec3 anchor;
+		fscanf_s(*fpp, "%f %f %f\n", &anchor.x, &anchor.y, &anchor.z);
+		mAnchorPoints.push_back(anchor);
+	}
+	else if(strcmp(JointType, "Hinge") == 0)
+	{
+		glm::vec3 anchor;
+		fscanf_s(*fpp, "%f %f %f\n", &anchor.x, &anchor.y, &anchor.z);
+		mAnchorPoints.push_back(anchor);
+		fscanf_s(*fpp, "%f %f %f\n", &anchor.x, &anchor.y, &anchor.z);
+		mAnchorPoints.push_back(anchor);
+	}
 	fscanf_s(*fpp, "%d\n", &jointNumber);
 }

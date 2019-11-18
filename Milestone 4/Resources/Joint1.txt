@@ -5,7 +5,10 @@ Sprite
 happy.png
 Controller
 Joint
-0.55 0.55 0.55 1
+Hinge
+0.55 0.55 0.55
+0.55 0.55 -0.55
+1
 Body
 1.0
 AABB
