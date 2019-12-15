@@ -1,5 +1,5 @@
-Joint2.txt
-Joint1.txt
+BallSocket1.txt
+BallSocket2.txt
 Plane.txt
 DebugCube.txt
 DebugCube.txt

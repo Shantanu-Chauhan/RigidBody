@@ -10,13 +10,15 @@ class Joint :public Component
 
 public:
 	std::vector<glm::vec3> mAnchorPoints;
-	int jointNumber;
+	int jointNumber1;
+	int jointNumber2;
 
 public:
 	Joint();
 	~Joint()
 	{
-		jointNumber = 0;
+		jointNumber1 = 0;
+		jointNumber2 = 0;
 	}
 
 	void Update(){}

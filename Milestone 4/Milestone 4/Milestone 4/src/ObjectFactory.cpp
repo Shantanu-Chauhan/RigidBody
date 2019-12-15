@@ -4,6 +4,7 @@
 #include"Manager/Game Object Manager.h"
 #include"../Components/Transform.h"
 #include"../Components/Body.h"
+#include"../Components/Joint.h"
 #include"Manager/PhysicsManager.h"
 #include"Manager/Input Manager.h"
 #include<iostream>
@@ -32,6 +33,7 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 			gpPhysicsManager->die.m_root = nullptr;
 
 			gpPhysicsManager->die.m_pairs.clear();
+			gpPhysicsManager->jointPairList.clear();
 		}
 		FILE* fp;
 		std::string fullpath = "..\\..\\Resources\\";
@@ -59,10 +61,14 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 			fclose(fp);
 
 		}
+		if (gpPhysicsManager != nullptr)
+		{
+			gpPhysicsManager->InitializeJoint();
+		}
 	}
 	else
 	{
-		if (gpInputManager->isTriggered(SDL_SCANCODE_1))
+		if (gpInputManager->isTriggered(SDL_SCANCODE_2))
 		{
 			gpGameObjectManager->mGameobjects.erase(gpGameObjectManager->mGameobjects.begin(), gpGameObjectManager->mGameobjects.end());
 			if (gpPhysicsManager != nullptr)
@@ -73,12 +79,12 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 
 				gpPhysicsManager->die.m_pairs.clear();
 			}
-			int dim = 10;
+			
 			{
 				GameObject* go = LoadObject("Plane.txt");
 				Body* pB = static_cast<Body*>(go->GetComponent(BODY));
 				Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
-				pTr->mPos = glm::vec3(0.0f , -5.0f, - 25.0f);
+				pTr->mPos = glm::vec3(0.0f, -1.0f, -10.0f);
 				pB->Initialize();
 				if (gpPhysicsManager != nullptr && pB)
 					gpPhysicsManager->die.Add(pB);
@@ -86,13 +92,13 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 			}
 			{
 				int dim = 5;
-				for (int i = 0; i < dim; ++i) {
+				for (int i = 0; i < dim+1; ++i) {
 					for (int j = 0; j < dim; ++j) {
 						for (int k = 0; k < dim; ++k) {
 							GameObject* go = LoadObject("Cube.txt");
 							Body* pB = static_cast<Body*>(go->GetComponent(BODY));
 							Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
-							pTr->mPos = glm::vec3(i * -1.5f, j * 2.0f, k * 1.5f - 22.0f);
+							pTr->mPos = glm::vec3(i * -3.0f, j * 2.0f, k * 3.0f - 22.0f);
 							pB->Initialize();
 							if (gpPhysicsManager != nullptr && pB)
 								gpPhysicsManager->die.Add(pB);
@@ -104,8 +110,8 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 		else
 			if (gpInputManager->isTriggered(SDL_SCANCODE_3))
 			{
-				int NumberOfStacks = 40;
-				int HeightofStack = 5;
+				int NumberOfStacks = 1;
+				int HeightofStack = 10;
 				gpGameObjectManager->mGameobjects.erase(gpGameObjectManager->mGameobjects.begin(), gpGameObjectManager->mGameobjects.end());
 				if (gpPhysicsManager != nullptr)
 				{
@@ -116,7 +122,7 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 					GameObject* go = LoadObject("Plane.txt");
 					Body* pB = static_cast<Body*>(go->GetComponent(BODY));
 					Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
-					pTr->mPos = glm::vec3( 0.0f, -2.0f, -10.0f);
+					pTr->mPos = glm::vec3(0.0f, -1.0f, -10.0f);
 					pB->Initialize();
 					if (gpPhysicsManager != nullptr && pB)
 						gpPhysicsManager->die.Add(pB);
@@ -132,7 +138,7 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 							if (gpPhysicsManager != nullptr && pB)
 								gpPhysicsManager->die.Add(pB);
 						}
-					
+
 					}
 				}
 
@@ -149,21 +155,97 @@ void ObjectFactory::LoadLevel(const char* pFilename, bool objects)
 
 						gpPhysicsManager->die.m_pairs.clear();
 					}
-					GameObject* go = LoadObject("Cube.txt");
+					GameObject* go = LoadObject("HingeJoint1.txt");
 					Body* pB = static_cast<Body*>(go->GetComponent(BODY));
+					pB->mMass = 1.0f;
+					pB->mInvMass = 1 / pB->mMass;
 					Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
-					pTr->mPos = glm::vec3(0.0f, 3.0f, -12.0f);
+					pB->Initialize();
+					if (gpPhysicsManager != nullptr && pB)
+						gpPhysicsManager->die.Add(pB);
+
+					go = LoadObject("HingeJoint2.txt");
+					pB = static_cast<Body*>(go->GetComponent(BODY));
+					pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
+					pB->mMass = 1.0f;
+					pB->mInvMass = 1 / pB->mMass;
 					pB->Initialize();
 					if (gpPhysicsManager != nullptr && pB)
 						gpPhysicsManager->die.Add(pB);
 					go = LoadObject("Plane.txt");
 					pB = static_cast<Body*>(go->GetComponent(BODY));
 					pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
-					pTr->mPos = glm::vec3(0.0f, -2.0f, -12.0f);
 					pB->Initialize();
 					if (gpPhysicsManager != nullptr && pB)
 						gpPhysicsManager->die.Add(pB);
+					gpPhysicsManager->InitializeJoint();
 				}
+				else
+					if (gpInputManager->isTriggered(SDL_SCANCODE_5))
+					{
+						gpGameObjectManager->mGameobjects.erase(gpGameObjectManager->mGameobjects.begin(), gpGameObjectManager->mGameobjects.end());
+						if (gpPhysicsManager != nullptr)
+						{
+
+							delete gpPhysicsManager->die.m_root;
+							gpPhysicsManager->die.m_root = nullptr;
+
+							gpPhysicsManager->die.m_pairs.clear();
+						}
+						int jointNumber1 = 0;
+						int jointNumber2 = 1;
+						glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+						glm::vec3 joint1 = glm::vec3(0.55f, 0.55f, 0.55f);
+						glm::vec3 joint2 = glm::vec3(0.55f, 0.55f, -0.55f);
+						GameObject* go = LoadObject("SOLIDJOINT.txt");
+						Body* pB = static_cast<Body*>(go->GetComponent(BODY));
+						Transform* pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
+						Joint* pJoint = static_cast<Joint*>(go->GetComponent(JOINT));
+						pTr->mPos = position;
+						pB->Initialize();
+						if (gpPhysicsManager != nullptr && pB)
+							gpPhysicsManager->die.Add(pB);
+						pJoint->jointNumber1 = jointNumber1;
+						pJoint->jointNumber2 = jointNumber2;
+						jointNumber1++;
+						jointNumber2++;
+						for (int i = 0; i < 13; i++)
+						{
+							go = LoadObject("HingeJoint1.txt");
+							pB = static_cast<Body*>(go->GetComponent(BODY));
+							pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
+							pJoint = static_cast<Joint*>(go->GetComponent(JOINT));
+							position.x += 1.1f;
+							pTr->mPos = position;
+							pB->Initialize();
+							if (gpPhysicsManager != nullptr && pB)
+								gpPhysicsManager->die.Add(pB);
+							pJoint->jointNumber1 = jointNumber1;
+							pJoint->jointNumber2 = jointNumber2;
+							jointNumber1++;
+							jointNumber2++;
+						}
+						go = LoadObject("SOLIDJOINT.txt");
+						pB = static_cast<Body*>(go->GetComponent(BODY));
+						pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
+						pJoint = static_cast<Joint*>(go->GetComponent(JOINT));
+						position.x += 1.1f;
+						pTr->mPos = position;
+						pB->Initialize();
+						if (gpPhysicsManager != nullptr && pB)
+							gpPhysicsManager->die.Add(pB);
+						pJoint->jointNumber1 = jointNumber1;
+						pJoint->jointNumber2 = jointNumber2;
+
+					/*	go = LoadObject("Plane.txt");
+						pB = static_cast<Body*>(go->GetComponent(BODY));
+						pTr = static_cast<Transform*>(go->GetComponent(TRANSFORM));
+						pTr->mPos = glm::vec3(0.0f, -2.0f, -12.0f);
+						pB->Initialize();
+						if (gpPhysicsManager != nullptr && pB)
+							gpPhysicsManager->die.Add(pB);*/
+						gpPhysicsManager->InitializeJoint();
+					}
 	}
 }
 

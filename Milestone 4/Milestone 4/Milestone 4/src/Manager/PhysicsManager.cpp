@@ -13,6 +13,13 @@
 #include "glm/gtx/norm.hpp"
 #include"imgui/imgui.h"
 
+// Tuning
+const float frequencyHz = 80.0f;
+const float dampingRatio = 1.5f;
+// frequency in radians
+const float omega = 2.0f * 3.14f * frequencyHz;
+
+
 const float FRICTION = 0.002f;
 //const float baumguarte = 0.15f;
 const float baumguarte = 0.2f;
@@ -29,6 +36,8 @@ void ApplyImpulseToJoint(glm::vec3 joint1, glm::vec3 joint2, Body* pBody1, Body*
 
 float Gravity = 9.8f;
 
+
+
 PhysicsManager::PhysicsManager()
 {
 	cubeNum = 0;
@@ -39,35 +48,7 @@ PhysicsManager::PhysicsManager()
 		Body* pBody1 = static_cast<Body*>(c->GetComponent(BODY));
 		die.Add(pBody1);
 	}
-	for (int i = 0; i < gpGameObjectManager->mGameobjects.size(); i++)
-	{
-		Joint* pJoint1 = static_cast<Joint*>(gpGameObjectManager->mGameobjects[i]->GetComponent(JOINT));
-		if (pJoint1 == nullptr)
-			continue;
-		for (int j = i; j < gpGameObjectManager->mGameobjects.size(); j++)
-		{
-			Joint* pJoint2 = static_cast<Joint*>(gpGameObjectManager->mGameobjects[j]->GetComponent(JOINT));
-			if (pJoint2 == nullptr)
-				continue;
-			if (pJoint1->jointNumber == pJoint2->jointNumber)
-			{
-				if (gpGameObjectManager->mGameobjects[i] != gpGameObjectManager->mGameobjects[j])
-				{
-					Body* pBody1 = static_cast<Body*>(gpGameObjectManager->mGameobjects[i]->GetComponent(BODY));
-					Body* pBody2 = static_cast<Body*>(gpGameObjectManager->mGameobjects[j]->GetComponent(BODY));
-					for (int i = 0; i < pJoint1->mAnchorPoints.size(); i++)
-					{
-						pJoint1->mAnchorPoints[i] = (pJoint1->mAnchorPoints[i] - pBody1->mPos) * glm::transpose(pBody1->rotationmatrix);
-						pJoint2->mAnchorPoints[i] = (pJoint2->mAnchorPoints[i] - pBody2->mPos) * glm::transpose(pBody2->rotationmatrix);
-					}
-					jointPairList.push_back(
-						std::make_pair(gpGameObjectManager->mGameobjects[i], gpGameObjectManager->mGameobjects[j])
-					);//Make pairs and push
-				}
-			}
-		}
-	}
-
+	InitializeJoint();
 }
 
 void PhysicsManager::Update(float frameTime)
@@ -85,7 +66,7 @@ void PhysicsManager::Update(float frameTime)
 	for (auto c : die.m_pairs)
 	{
 		//Doing SAT for the pairs that got detected as potentially colliding pairs in dynamic AABB tree
-		if (c.first->mMass < 100.0f || c.second->mMass < 100.0f)//Not doing SAT for the floor which has mass 2.0f
+		if (c.first->mMass < 100.0f || c.second->mMass < 100.0f)//Not doing SAT for 2 static objects which have mass of 100.0f
 			sat.IntersectionTest(c.first, c.second);
 	}
 
@@ -96,22 +77,20 @@ void PhysicsManager::Update(float frameTime)
 		pBody->Integrate(frameTime);
 	}
 
-	//Initializing MassMatrix as 0 matrix
-
-
-	//BELOW IS THE CODE FOR SEQUENTIAL IMPULSE
-	//Everything is laid out below step by step so that anyone can read what to do with sequential impulses
-	//(will change it during the summer for applying friction as well!)
-
-
-
+	//Trying to figure out if the old contact points are near identical to new ones and using the 
+	//impulse calculated in the previous frame as the basis for this frame(basically warm start)
 	WarmStart(gpCollisionManager);
+
+	//Applying the full impulse to the contact points taken out from the warm start
 	PreStep(gpCollisionManager, frameTime);
+
+	//Normal impulse calculation
 	ApplyImpulseToContacts(gpCollisionManager, frameTime);
+
+	//Applying impulses to satisfy joint constraints
 	SolveJoints(frameTime);
 
-	//Copy the contact manifold to the old one
-	//for (int i = 0; i< gpCollisionManager->mContacts.size(); ++i)
+	//Storing current contact manifold so that it can be used in the next frame for warm starting
 	for (auto old : gpCollisionManager->mOldContacts)
 		delete old;
 	gpCollisionManager->mOldContacts.clear();
@@ -122,11 +101,11 @@ void PhysicsManager::Update(float frameTime)
 		gpCollisionManager->mOldContacts.push_back(test);
 		size += (*it)->ContactPoints.size();
 	}
-	//SEQUENTIAL IMPULSE ENDED
 
 	ImGui::Begin("Total contact points");
 	ImGui::Text("%d", size);
 	ImGui::End();
+
 	//Updating the position according
 	for (auto go : gpGameObjectManager->mGameobjects)
 	{
@@ -146,17 +125,20 @@ void WarmStart(CollisionManager* gpCollisionManager)
 		{
 			for (auto newContactManifold : gpCollisionManager->mContacts)
 			{
-				if (oldContactManifold->mBodies[0] == newContactManifold->mBodies[0] && oldContactManifold->mBodies[1] == newContactManifold->mBodies[1]
-					|| oldContactManifold->mBodies[0] == newContactManifold->mBodies[1] && oldContactManifold->mBodies[1] == newContactManifold->mBodies[0])
+				//Checking if the bodies in the old and new are same
+				if (oldContactManifold->mBodies[0] == newContactManifold->mBodies[0] &&
+					oldContactManifold->mBodies[1] == newContactManifold->mBodies[1] ||
+					oldContactManifold->mBodies[0] == newContactManifold->mBodies[1] &&
+					oldContactManifold->mBodies[1] == newContactManifold->mBodies[0])
 				{
 					for (int i = 0; i < oldContactManifold->ContactPoints.size(); ++i)
 					{
 						for (int j = 0; j < newContactManifold->ContactPoints.size(); ++j)
 						{
+							//Checking if the old and new contact points are close enough to warm start
 							float dist = glm::distance2(oldContactManifold->ContactPoints[i], newContactManifold->ContactPoints[j]);
 							if (dist < 0.001f)
 							{
-								//printf("%f\n", dist);
 								newContactManifold->lambdaSum[j] = oldContactManifold->lambdaSum[i];
 								newContactManifold->tangentImpulseSum1[j] = oldContactManifold->tangentImpulseSum1[i];
 								newContactManifold->tangentImpulseSum2[j] = oldContactManifold->tangentImpulseSum2[i];
@@ -171,22 +153,32 @@ void WarmStart(CollisionManager* gpCollisionManager)
 
 void ApplyImpulseToJoint(glm::vec3 joint1, glm::vec3 joint2, Body* pBody1, Body* pBody2, float frameTime)
 {
-	ImGui::Begin("RELATIVE");
-	//rj = rj - pBody2->mPos;
 
 	//Relative velocity
-	//glm::vec3 Ck = pBody1->mVel + (glm::cross(pBody1->AngularVelocity, ri)) - pBody2->mVel - (glm::cross(pBody2->AngularVelocity, rj));
 	glm::vec3 Ck = pBody1->mVel - (glm::matrixCross3(joint1) * pBody1->AngularVelocity) - pBody2->mVel + (glm::matrixCross3(joint2) * pBody2->AngularVelocity);
 	glm::mat3 Kj, Ki;
-	ImGui::Text("relative 1 - x:%f,y:%f,z:%f", Ck.x, Ck.y, Ck.z);
 
 	Kj = (pBody2->mInvMass * glm::mat3(1.0f)) - (glm::matrixCross3(joint2) * (pBody2->WorldSpaceInertia) * glm::matrixCross3(joint2));
 	Ki = (pBody1->mInvMass * glm::mat3(1.0f)) - (glm::matrixCross3(joint1) * (pBody1->WorldSpaceInertia) * glm::matrixCross3(joint1));
 
 	glm::mat3 K = Kj + Ki;
 
+	//Distance between 2 joints
 	glm::vec3 delP = pBody2->mPos + joint2 - pBody1->mPos - joint1;
-	glm::vec3  bias = (0.8f) / frameTime * delP;
+
+	// damping coefficient
+	float d = 2.0f * 99.0f * dampingRatio * omega;
+
+	// spring stifness
+	float k = 50.0f * omega * omega;
+
+	// magic formulas
+	//float softness = 1.0f / (d + frameTime * k);
+	float biasFactor = frameTime * k / (d + frameTime * k);
+
+	//glm::vec3  bias = (0.8f) * delP / frameTime;
+
+	glm::vec3 bias = biasFactor * delP / frameTime;
 
 	glm::vec3 Impulse = glm::inverse(K) * (bias - Ck);
 
@@ -195,12 +187,12 @@ void ApplyImpulseToJoint(glm::vec3 joint1, glm::vec3 joint2, Body* pBody1, Body*
 	linear2 = -Impulse * pBody2->mInvMass;
 	pBody1->mVel += linear1;
 	pBody2->mVel += linear2;
+
 	glm::vec3 angular1, angular2;
 	angular1 = (pBody1->WorldSpaceInertia) * (glm::cross(joint1, Impulse));
 	angular2 = -(pBody2->WorldSpaceInertia) * (glm::cross(joint2, Impulse));
 	pBody1->AngularVelocity += angular1;
 	pBody2->AngularVelocity += angular2;
-	ImGui::End();
 
 }
 
@@ -212,17 +204,44 @@ void PhysicsManager::SolveJoints(float frameTime)
 		{
 			GameObject* pGameObject1 = j.first;
 			GameObject* pGameObject2 = j.second;
-			Joint* pJoint1 = static_cast<Joint*>(pGameObject1->GetComponent(JOINT));
-			Joint* pJoint2 = static_cast<Joint*>(pGameObject2->GetComponent(JOINT));
 			Body* pBody1 = static_cast<Body*>(pGameObject1->GetComponent(BODY));
 			Body* pBody2 = static_cast<Body*>(pGameObject2->GetComponent(BODY));
+			Joint* pJoint1 = static_cast<Joint*>(pGameObject1->GetComponent(JOINT));
+			Joint* pJoint2 = static_cast<Joint*>(pGameObject2->GetComponent(JOINT));
+			//Converting the local anchor points stored to global points and sending to apply the corrective impulse
 			for (int i = 0; i < pJoint1->mAnchorPoints.size(); i++)
 			{
 				glm::vec3 joint1 = pJoint1->mAnchorPoints[i];
 				joint1 = pBody1->rotationmatrix * joint1;
-				glm::vec3 joint2 = pJoint2->mAnchorPoints[i];
+				glm::vec3 joint2 = glm::vec3(-pJoint1->mAnchorPoints[i].x, pJoint1->mAnchorPoints[i].y, pJoint1->mAnchorPoints[i].z);
 				joint2 = pBody2->rotationmatrix * joint2;
 				ApplyImpulseToJoint(joint1, joint2, pBody1, pBody2, frameTime);
+			}
+		}
+	}
+}
+
+void PhysicsManager::InitializeJoint()
+{
+	//Creating Joint pair list by reading the joint number and creating a pair of the objects with the same joint number
+	for (int i = 0; i < gpGameObjectManager->mGameobjects.size(); i++)
+	{
+		Joint* pJoint1 = static_cast<Joint*>(gpGameObjectManager->mGameobjects[i]->GetComponent(JOINT));
+		if (pJoint1 == nullptr)
+			continue;
+		for (int j = i; j < gpGameObjectManager->mGameobjects.size(); j++)
+		{
+			Joint* pJoint2 = static_cast<Joint*>(gpGameObjectManager->mGameobjects[j]->GetComponent(JOINT));
+			if (pJoint2 == nullptr)
+				continue;
+			if (pJoint1->jointNumber2 == pJoint2->jointNumber1)
+			{
+				if (gpGameObjectManager->mGameobjects[i] != gpGameObjectManager->mGameobjects[j])
+				{
+					jointPairList.push_back(
+						std::make_pair(gpGameObjectManager->mGameobjects[i], gpGameObjectManager->mGameobjects[j])
+					);
+				}
 			}
 		}
 	}
@@ -231,6 +250,7 @@ void PhysicsManager::SolveJoints(float frameTime)
 
 void PreStep(CollisionManager* gpCollisionManager, float frameTime)
 {
+	//Applying the full impulse taken from the previous time step
 	Eigen::Matrix<float, 12, 1> deltaV;
 	Eigen::Matrix<float, 12, 1> Velocity;
 	Eigen::Matrix<float, 1, 12> Jacobian;
@@ -405,7 +425,7 @@ void ApplyImpulseToContacts(CollisionManager* gpCollisionManager, float frameTim
 	Eigen::Matrix<float, 12, 1> MaxxInvXJacobianT;
 	Eigen::Matrix<float, 12, 1> DeltaV;
 	glm::vec3 LinearA, LinearB, AngularA, AngularB;
-	for (int z = 0; z < 8; z++)//10 iterations of sequential impulses
+	for (int z = 0; z < 8; z++)//iterations of sequential impulses
 	{
 		for (auto c : gpCollisionManager->mContacts)
 		{

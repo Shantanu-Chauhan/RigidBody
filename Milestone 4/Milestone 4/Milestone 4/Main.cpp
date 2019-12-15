@@ -115,7 +115,7 @@ int main(int argc, char* args[])
 	gpEventManager			= new EventManager();
 	gpRenderer				= new Renderer();
 
-	gpCamera = new Camera(0, 0, 0, 0, 1, 0, -90, 0);
+	gpCamera = new Camera(5, 10, 20, 0, 1, 0, -90, -15);
 
 	if((error = SDL_Init( SDL_INIT_VIDEO )) < 0 )
 	{
@@ -277,7 +277,11 @@ int main(int argc, char* args[])
 			ImGui::Text("To move the camera use the arrow keys");
 			ImGui::Text("To rotate the camera right click and move the mouse");
 			ImGui::Text("Press 'O'(not zero! but 'o') to draw the mesh of the dynamicAABB tree");
-			ImGui::Text("Press '1' to get the big stack of cubes(they spawn in front of the 1 box that is immovable)");
+			ImGui::Text("Press '1' to get the BALL AND SOCKET JOINT");
+			ImGui::Text("Press '2' to get the big stack of cubes");
+			ImGui::Text("Press '3' to get the single stack of 10 cubes");
+			ImGui::Text("Press '4' to get HINGE JOINT");
+			ImGui::Text("Press '5' to get the BRIDGE");
 			ImGui::Text("Press 'SPACE' to pause/resume the simulation");
 			ImGui::Text("Press 'Enter' to step the physics update");
 			ImGui::Text("Press 'Escape' to close the application");
@@ -291,17 +295,21 @@ int main(int argc, char* args[])
 			}
 			if (gpInputManager->isTriggered(SDL_SCANCODE_1))//Load the big level
 			{
-				gpGameObjectFactory->LoadLevel("Title_Screenp.txt",true);
+				gpGameObjectFactory->LoadLevel("Title_Screenp.txt", false);
 			}
 			if (gpInputManager->isTriggered(SDL_SCANCODE_2))//Load the big level
 			{
-				gpGameObjectFactory->LoadLevel("Title_Screenp.txt", false);
+				gpGameObjectFactory->LoadLevel("Title_Screenp.txt",true);
 			}
 			if (gpInputManager->isTriggered(SDL_SCANCODE_3))//Load the big level
 			{
 				gpGameObjectFactory->LoadLevel("Title_Screenp.txt", true);
 			}
 			if (gpInputManager->isTriggered(SDL_SCANCODE_4))//Load the big level
+			{
+				gpGameObjectFactory->LoadLevel("Title_Screenp.txt", true);
+			}
+			if (gpInputManager->isTriggered(SDL_SCANCODE_5))//Load the big level
 			{
 				gpGameObjectFactory->LoadLevel("Title_Screenp.txt", true);
 			}

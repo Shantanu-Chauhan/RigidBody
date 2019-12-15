@@ -1,0 +1,15 @@
+CUBE
+Transform
+1.1 0.0 0.0 1.0 1.0 1.0
+Sprite
+happy.png
+Joint
+Hinge
+0.55 0.50 0.50
+0.55 0.50 -0.50
+0 1
+Body
+200.0
+AABB
+quaternion
+0.0 0.0 0.0 1.0

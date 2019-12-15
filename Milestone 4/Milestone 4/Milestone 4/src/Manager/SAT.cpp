@@ -371,10 +371,7 @@ bool SAT::IntersectionTest(Body* A, Body* B)
 		Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->twin, true);
 		//Polygon = Clip(Manifold, Polygon, ReferenceFace->edge->twin);
 		//^^^^^^^The final points are also clipped against the reference face so as to get the points on or behind the reference face
-		if (Polygon.size() < 4)
-		{
-			//printf("Less than 4 contact points \n");
-		}
+
 		glm::vec3 ReferenceNormal = ReferenceFace->Normal;
 		ReferenceNormal = Manifold->mBodies[0]->rotationmatrix * ReferenceNormal;
 		//Now depth is calulated and pushed for every point
@@ -499,12 +496,11 @@ std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, H
 
 std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, HalfEdge::Edge* ReferenceFace, bool check)
 {
-	float test = 0.0f;
-	float test1 = 0.0f;
+	float slop = 0.0f;
+	//Only if its the base/bottom face
 	if (check)
 	{
-		//test = 0.00101f;
-		test = 0.005;
+		slop = 0.005;
 	}
 	std::vector<glm::vec3> Out;
 	if (Polygon.empty())
@@ -521,7 +517,7 @@ std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, H
 		float distance2 = distance(Normal, PointOnPlane, endVertex);
 
 		//if (signbit(distance1) && signbit(distance2 ))//Both points are behind or on the reference face
-		if (distance1 < 0.0f - test && distance2 > 0.0f )//Start point is behind end point is in front
+		if (distance1 < 0.0f - slop && distance2 > 0.0f )//Start point is behind end point is in front
 		{
 			//changed
 			float fraction = distance1 / (distance1 - distance2);
@@ -531,11 +527,11 @@ std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, H
 
 		}
 		else//new
-			if (distance1 < 0.0f - test && ((distance2 <= 0.0f) && (distance2 >= 0.0f - test)))
+			if (distance1 < 0.0f - slop && ((distance2 <= 0.0f) && (distance2 >= 0.0f - slop)))
 			{
 				Out.push_back(endVertex);
 			}
-			else if (distance1 > 0.0f && distance2 < 0.0f - test)//Start point is in from and end point is behind
+			else if (distance1 > 0.0f && distance2 < 0.0f - slop)//Start point is in from and end point is behind
 			{
 				//changed
 				float fraction = distance1 / (distance1 - distance2);
@@ -544,18 +540,18 @@ std::vector<glm::vec3> Clip(Contact* Manifold, std::vector<glm::vec3> Polygon, H
 				Out.push_back(endVertex);//as well as the end point
 			}
 			else//new
-				if (((distance1 <= 0.0f) && (distance1 >= 0.0f - test)) && distance2 < 0.0f - test)
+				if (((distance1 <= 0.0f) && (distance1 >= 0.0f - slop)) && distance2 < 0.0f - slop)
 				{
 					Out.push_back(StartVertex);
 					Out.push_back(endVertex);
 				}
 				else
-					if (distance1 < 0.0f - test && distance2 < 0.0f - test)//Both points are behind or on the reference face
+					if (distance1 < 0.0f - slop && distance2 < 0.0f - slop)//Both points are behind or on the reference face
 					{
 						Out.push_back(endVertex);//take the end point
 					}
 					else//new
-						if (((distance1 <= 0.0f) && (distance1 >= 0.0f - test)) && ((distance2 <= 0.0f) && (distance2 >= 0.0f - test)))
+						if (((distance1 <= 0.0f) && (distance1 >= 0.0f - slop)) && ((distance2 <= 0.0f) && (distance2 >= 0.0f - slop)))
 						{
 							Out.push_back(endVertex);
 						}

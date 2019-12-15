@@ -2,7 +2,8 @@
 
 Joint::Joint() : Component(JOINT)
 {
-	jointNumber = 0;
+	jointNumber1 = 0;
+	jointNumber2 = 0;
 }
 
 void Joint::Serialize(FILE** fpp)
@@ -22,6 +23,11 @@ void Joint::Serialize(FILE** fpp)
 		mAnchorPoints.push_back(anchor);
 		fscanf_s(*fpp, "%f %f %f\n", &anchor.x, &anchor.y, &anchor.z);
 		mAnchorPoints.push_back(anchor);
+		//fscanf_s(*fpp, "%f %f %f\n", &anchor.x, &anchor.y, &anchor.z);
+		//mAnchorPoints.push_back(anchor);
+		//fscanf_s(*fpp, "%f %f %f\n", &anchor.x, &anchor.y, &anchor.z);
+		//mAnchorPoints.push_back(anchor);
 	}
-	fscanf_s(*fpp, "%d\n", &jointNumber);
+	fscanf_s(*fpp, "%d\n", &jointNumber1);
+	fscanf_s(*fpp, "%d\n", &jointNumber2);
 }

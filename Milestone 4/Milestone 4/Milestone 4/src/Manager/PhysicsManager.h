@@ -21,6 +21,7 @@ public:
 	~PhysicsManager();
 	void Update(float frameTime);
 	void SolveJoints(float frameTime);
+	void InitializeJoint();
 	int cubeNum;
 	int passNum;
 	//NSquared broad;
