@@ -46,13 +46,13 @@ void GameObjectManager::DrawObjectDraw(VertexArray& va, IndexBuffer& ib, Shader*
 		if (debug)
 		{
 			if (!pBody->hit)
-				shader->SetUniform4f("color1", 1.0f, 0.0f, 0.0f, 1.0f);
+				shader->SetUniform4f("color1", 1.0f, 1.0f, 1.0f, 1.0f);
 			else
-				shader->SetUniform4f("color1", 1.0f, 0.0f, 0.0f, 1.0f);
+				shader->SetUniform4f("color1", 1.0f, 1.0f, 1.0f, 1.0f);
 			glm::mat4 mvp = proj * view * pTR->mTransformDebug;
 			shader->SetUniformMat4f("u_MVP", mvp);
 			shader->SetUniform1i("change", true);
-			shader->SetUniform4f("color1",0.0f, 0.0f, 0.0f, 1.0f);// Have to store in the body or somewhere to change when collision occurs
+			shader->SetUniform4f("color1",1.0f, 1.0f, 1.0f, 1.0f);// Have to store in the body or somewhere to change when collision occurs
 			GLCall(glDrawElements(GL_LINE_LOOP, ib.GetCount(), GL_UNSIGNED_INT, NULL));
 		}
 
@@ -80,26 +80,26 @@ void GameObjectManager::DrawObjectDraw(VertexArray& va, IndexBuffer& ib, Shader*
 			}
 		}
 	}
-	//if (debug) {
-	//	for (int i = 0; i < mGameobjects.size(); ++i)
-	//	{
-	//		Transform* pTR = static_cast<Transform*>(mGameobjects[i]->GetComponent(TRANSFORM));
-	//		Body* pBody = static_cast<Body*>(mGameobjects[i]->GetComponent(BODY));
-	//		if (debug)
-	//		{
-	//			Sprite* pTex = static_cast<Sprite*>(mGameobjects[i]->GetComponent(SPRITE));
-	//			Body* pBody = static_cast<Body*>(mGameobjects[i]->GetComponent(BODY));
-	//			glm::mat4 model = pTR->mTransform;
-	//			glm::mat4 mvp = proj * view * model;
+	/*if (debug) {
+		for (int i = 0; i < mGameobjects.size(); ++i)
+		{
+			Transform* pTR = static_cast<Transform*>(mGameobjects[i]->GetComponent(TRANSFORM));
+			Body* pBody = static_cast<Body*>(mGameobjects[i]->GetComponent(BODY));
+			if (debug)
+			{
+				Sprite* pTex = static_cast<Sprite*>(mGameobjects[i]->GetComponent(SPRITE));
+				Body* pBody = static_cast<Body*>(mGameobjects[i]->GetComponent(BODY));
+				glm::mat4 model = pTR->mTransform;
+				glm::mat4 mvp = proj * view * model;
 
-	//			pTex->mpTexture->Bind();
-	//			shader->SetUniform1i("u_Texture", 0);
-	//			shader->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
-	//			shader->SetUniformMat4f("u_MVP", mvp);
-	//			gpRenderer->Draw(va, ib, shader, debug);
-	//		}
-	//	}
-	//}
+				pTex->mpTexture->Bind();
+				shader->SetUniform1i("u_Texture", 0);
+				shader->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
+				shader->SetUniformMat4f("u_MVP", mvp);
+				gpRenderer->Draw(va, ib, shader, debug);
+			}
+		}
+	}*/
 }
 
 void GameObjectManager::DrawTreeDraw(VertexArray& va, IndexBuffer& ib, Shader* shader, bool debug, Node* node)
@@ -107,13 +107,14 @@ void GameObjectManager::DrawTreeDraw(VertexArray& va, IndexBuffer& ib, Shader* s
 	glm::mat4 proj;
 	proj = glm::perspective(glm::radians(45.0f), 960.0f / 540.0f, 0.1f, 500.0f);
 	glm::mat4 view = gpCamera->GetViewMatrix();
-	glm::vec4 color[6] = {
-		glm::vec4(0.0f,0.0f,1.0f,1.0f),//BLUE
-		glm::vec4(1.0f,0.0f,1.0f,1.0f),//PINK
-		glm::vec4(1.0f,0.0f,0.0f,1.0f),//RED
-		glm::vec4(0.0f,0.0f,1.0f,1.0f),//CYAN
-		glm::vec4(0.0f,1.0f,0.0f,1.0f),//GREEN
-		glm::vec4(1.0f,1.0f,0.0f,1.0f),//YELLOW
+	glm::vec4 color[7] = {
+		glm::vec4(0.0f,0.0f,1.0f,1.0f),
+		glm::vec4(0.0f,1.0f,0.0f,1.0f),
+		glm::vec4(0.0f,1.0f,1.0f,1.0f),
+		glm::vec4(1.0f,0.0f,0.0f,1.0f),
+		glm::vec4(1.0f,0.0f,1.0f,1.0f),
+		glm::vec4(1.0f,1.0f,0.0f,1.0f),
+		glm::vec4(1.0f,1.0f,1.0f,1.0f),
 	};
 	if (!node->IsLeaf())
 	{

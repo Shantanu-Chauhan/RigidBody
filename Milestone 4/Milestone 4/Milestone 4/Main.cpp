@@ -253,7 +253,7 @@ int main(int argc, char* args[])
 			gpFRC->FrameStart();
 			gpInputManager->Update();
 			gpRenderer->Clear();
-			GLCall(glClearColor(1.0, 1.0, 1.0, 1.0));
+			GLCall(glClearColor(0.5, 0.5, 0.5, 1.0));
 			
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplSDL2_NewFrame(pWindow);
@@ -310,6 +310,10 @@ int main(int argc, char* args[])
 				gpGameObjectFactory->LoadLevel("Title_Screenp.txt", true);
 			}
 			if (gpInputManager->isTriggered(SDL_SCANCODE_5))//Load the big level
+			{
+				gpGameObjectFactory->LoadLevel("Title_Screenp.txt", true);
+			}
+			if (gpInputManager->isTriggered(SDL_SCANCODE_6))//Load the big level
 			{
 				gpGameObjectFactory->LoadLevel("Title_Screenp.txt", true);
 			}
